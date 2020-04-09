@@ -1,7 +1,27 @@
-html, body {
+html,
+body {
+    background-image: url('/static/img/background.jpeg');
+    font-family: sans-serif;
     height: 100vh;
     width: 100vw;
     margin: 0;
+}
+
+h1 {
+    grid-area: 1 / 2 / 2 / 3;
+    font-size: 80px;
+    text-shadow: rgb(139, 139, 139) 1px 0 10px;
+    -webkit-text-stroke: 2px white;
+    color: black;
+}
+
+p {
+    grid-area: 2 / 2 / 4 / 3;
+    font-size: 20px;
+    line-height: 2;
+    position: absolute;
+    top: 10%;
+    right: 9%;
 }
 
 .container {
@@ -14,5 +34,47 @@ html, body {
 }
 
 .display {
+    position: relative;
     grid-area: 2 / 2 / 4 / 3;
+    width: 350px;
+    height: 350px;
+    border: 3px solid rgb(153, 153, 153);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(247, 247, 247);    
+}
+
+form input[type=text] {
+    width: 280px;
+    height: 50px;
+    position: absolute;
+    text-align: center;
+    top: 40%;
+    left: 10%;
+    border: 2px solid lightseagreen;
+    border-radius: 10px;
+
+}
+form input[type=text]:focus {
+    border-color: lightseagreen;
+}
+
+form button {
+    position: absolute;
+    text-align: center;
+    left: 30%;
+    top: 70%;
+    width: 140px;
+    height: 40px;
+    background-color: lightseagreen;
+    border: 1.7px solid black;
+    border-radius: 10px;
+    font-size: 20px;
+    color: white;
+}
+
+form button:hover {
+    background-color: white;
+    color: lightseagreen;
 }
