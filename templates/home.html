@@ -4,13 +4,12 @@
 
 {% block body %}
 <h1>Welcome to Flack</h1>
-
-
 <div class="display"> 
-    <form>
+    <form action="{{ url_for('chat') }}" method="GET"> 
         <p>Chat with online people right now</p>
         <input type="text" placeholder="display name ..." name="name" required/>
         <button>Join</button>
      </form>
 </div>
+
 {% endblock %}

@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask,render_template
+from flask import Flask,render_template, request
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
@@ -10,6 +10,11 @@ socketio = SocketIO(app)
 @app.route("/")
 def index():
     return render_template("home.html")
+
+@app.route("/chat", methods=["GET"])
+def chat():
+    print(request.args.get('name'))
+    return render_template("chat.html")
 
 
 if __name__ == '__main__':
