@@ -9,12 +9,19 @@ socketio = SocketIO(app)
 
 @app.route("/")
 def index():
-    return render_template("home.html")
+    return render_template("layout.html")
 
-@app.route("/chat", methods=["GET"])
-def chat():
-    print(request.args.get('name'))
-    return render_template("chat.html")
+@app.route("/content", methods=["GET"])
+def content():
+    name = request.args.get('name')
+    if name == 'null':
+        with app.open_resource('templates/display.html') as f:
+            return f.read()
+  
+    # TODO: check if name is reguistered in server-side memory
+    with app.open_resource('templates/chat.html') as f:
+        html_body = f.read()
+    return html_body
 
 
 if __name__ == '__main__':
