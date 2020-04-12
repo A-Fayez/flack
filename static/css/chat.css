@@ -1,0 +1,5 @@
+.side-bar {
+  height: 100%;
+  width: 100%;
+  grid-area: 1 / 1 / 5 / 2;
+  background-color: lightseagreen; }

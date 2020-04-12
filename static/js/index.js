@@ -10,13 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const param = new URLSearchParams({
         name: localStorage.getItem('name')
     });
-    
+
     fetch('/content?' + param)
     .then(response => {
         const content = response.text()
         return content;
-    }).then(data => {
-        document.querySelector('.container').innerHTML = data;
+    }).then(html => {
+        
+        document.querySelector('.container').innerHTML = html;
     });
 
 })
