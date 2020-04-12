@@ -1,8 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}
+    Flack
+{% endblock %}
+
+{% block body %}
+<h1>Welcome to Flack</h1>
 <div class="display"> 
-    <form>
+    <form action="{{ url_for('join') }}" method="POST">
         <p>Chat with online people right now</p>
         <input type="text" placeholder="display name ..." name="name" required/>
         <button>Join</button>
      </form>
 </div>
+{% endblock %}
 
