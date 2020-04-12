@@ -1,4 +1,4 @@
-node_modules/*
+static/node_modules/*
 static/sass/chat.scss
 instance/*
 !instance/.gitignore
