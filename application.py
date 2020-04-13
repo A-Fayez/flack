@@ -29,14 +29,15 @@ def content():
 
     return html_body
 
+# TODO: check if user already exists
 @app.route("/join", methods=["POST"])
 def join():
 
     name = request.form.get("name")
     if name not in users:
         users.append(name)
-    print(users)
-    return render_template("chat.html")
+    print(users) # for debugging
+    return render_template("chat.html", display_name=name)
 
 
 if __name__ == '__main__':

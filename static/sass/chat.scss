@@ -21,11 +21,43 @@
     -webkit-order: $val;  
     order: $val;
   }
+
+  @mixin text($color, $size) {
+    color: $color;
+    font-size: $size;  
+  }
   
 .side-bar {
     @include flexbox();
+    position: relative;
     height: 100%;
     width: 100%;
     grid-area: 1 / 1 / 5 / 2;
     background-color: lightseagreen;
+}
+
+.header-info {
+  position: fixed;
+  @include flexbox();
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  width: 25%;
+  height: 10%;
+  top: 8%;
+}
+
+#online {
+  position: absolute;
+  right: 88%;
+  height: 15px;
+  width: 15px;
+  background-color: rgb(79, 255, 88);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+#name {
+  @include text(white, 25px);
 }
