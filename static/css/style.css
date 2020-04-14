@@ -28,7 +28,7 @@ p {
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-columns: 25% auto 20%;
+    grid-template-columns: 20% auto 20%;
     grid-template-rows: repeat(4, 1fr);
     place-items: center;
 }
@@ -52,12 +52,12 @@ form input[type=text] {
     text-align: center;
     top: 40%;
     left: 10%;
-    border: 2px solid lightseagreen;
+    border: 2px solid #3F0E40;
     border-radius: 10px;
 
 }
 form input[type=text]:focus {
-    border-color: lightseagreen;
+    border-color: #3F0E40;
 }
 
 form button {
@@ -67,7 +67,7 @@ form button {
     top: 70%;
     width: 140px;
     height: 40px;
-    background-color: lightseagreen;
+    background-color: #3F0E40;
     border: 1.7px solid black;
     border-radius: 10px;
     font-size: 20px;
@@ -76,5 +76,5 @@ form button {
 
 form button:hover {
     background-color: white;
-    color: lightseagreen;
+    color: #3F0E40;
 }

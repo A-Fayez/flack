@@ -24,8 +24,11 @@
 
   @mixin text($color, $size) {
     color: $color;
-    font-size: $size;  
-  }
+    font-size: $size;
+    -webkit-text-stroke-width: 0.4px;
+    -webkit-text-stroke-color: black;
+    letter-spacing : 0.05em;
+}
   
 .side-bar {
     @include flexbox();
@@ -33,31 +36,58 @@
     height: 100%;
     width: 100%;
     grid-area: 1 / 1 / 5 / 2;
-    background-color: lightseagreen;
+    background-color: #3F0E40;
 }
 
 .header-info {
   position: fixed;
   @include flexbox();
-  justify-content: center;
+  @include order(1);
+  justify-content: left;
   align-items: center;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
-  width: 25%;
+  width: 20%;
   height: 10%;
   top: 8%;
 }
 
 #online {
   position: absolute;
-  right: 88%;
-  height: 15px;
-  width: 15px;
+  right: 90%;
+  height: 12px;
+  width: 12px;
   background-color: rgb(79, 255, 88);
   border-radius: 50%;
   display: inline-block;
 }
 
 #name {
-  @include text(white, 25px);
+  @include text(white, 18px);
+  position: relative;
+  left: 12%;
 }
+
+.channels-section {
+  @include order(1);
+  position: fixed;
+  width: 20%;
+  height: 70%;
+  top: 20%;
+  border-bottom: 1px solid black;
+  padding-top: 1.5%;
+}
+
+#channels {
+  @include text(white, 23px);
+  position: relative;
+  left: 13%;
+}
+
+#new-channel-btn {
+  position: relative;
+  top: -0.4%;
+  left: 23%;
+}
+
+
