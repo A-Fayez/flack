@@ -47,7 +47,7 @@
   align-items: center;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
-  width: 20%;
+  width: 18%;
   height: 10%;
   top: 8%;
 }
@@ -71,23 +71,62 @@
 .channels-section {
   @include order(1);
   position: fixed;
-  width: 20%;
+  width: 18%;
   height: 70%;
   top: 20%;
-  border-bottom: 1px solid black;
-  padding-top: 1.5%;
 }
 
-#channels {
+#channels-label {
   @include text(white, 23px);
   position: relative;
-  left: 13%;
+  top: -5%;
+  left: 5%;
 }
 
 #new-channel-btn {
   position: relative;
-  top: -0.4%;
-  left: 23%;
+  top: -4%;
+  left: 30%;
+  color: wheat;
+  text-decoration: none;
+  font-size: xx-large;
+}
+
+.channels {
+  display: block;
+  width: 100%; 
+  padding: 0 0 0 5%;
+}
+
+ul {
+  list-style-type: none; 
+}
+
+ul li {
+  margin: 7% 0;
+  opacity: 50%;
+}
+
+ul {
+  li {
+     a {
+        text-decoration: none;
+        color: white;
+        padding: 3% 0;
+     }
+  }
+}
+
+ul li a:active {
+  background-color: white;
+  opacity: 50%;
+  color: black;
+}
+
+.input-message-area {
+  grid-area: 4 / 2 / 5 / 4;
+  @include flexbox();
+  flex-wrap: wrap;
 }
 
 
