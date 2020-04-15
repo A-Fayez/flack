@@ -31,6 +31,7 @@ p {
     grid-template-columns: 18% auto 20%;
     grid-template-rows: repeat(4, 1fr);
     place-items: center;
+    grid-gap: 1rem;
 }
 
 .display {

@@ -129,4 +129,23 @@ ul li a:active {
   flex-wrap: wrap;
 }
 
+#message-box {
+  place-self: start;
+  border: 1px solid black;
+  border-radius: 5%;
+  width: 70vw;
+  height: 8vw;
+}
+
+.messages {
+  grid-area: 1 / 2 / 4 / 4;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(216, 213, 216);
+  border-radius: 5%;;
+  margin-right: 2%;
+  margin-top: 3%;
+  width: 74vw;
+  height: 35vw;
+}
 
