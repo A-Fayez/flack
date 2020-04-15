@@ -93,34 +93,35 @@
 }
 
 .channels {
-  display: block;
-  width: 100%; 
+  position: relative;
   padding: 0 0 0 5%;
 }
 
 ul {
-  list-style-type: none; 
-}
-
-ul li {
-  margin: 7% 0;
-  opacity: 50%;
-}
-
-ul {
-  li {
-     a {
-        text-decoration: none;
-        color: white;
-        padding: 3% 0;
-     }
-  }
+    list-style-type: none; 
+      li {
+        
+          margin: 7% 0;
+          opacity: 70%;
+           a {
+              text-decoration: none;
+              color: white;
+              padding: 3% 0;        
+           }
+      }
 }
 
 ul li a:active {
   background-color: white;
   opacity: 50%;
   color: black;
+}
+
+ul li a:hover,
+#new-channel-btn:hover {
+  background-color: white;
+  color: black;
+  font-weight: bold; 
 }
 
 .input-message-area {
@@ -131,10 +132,10 @@ ul li a:active {
 
 #message-box {
   place-self: start;
-  border: 1px solid black;
+  border: 1.5px solid black;
   border-radius: 5%;
-  width: 70vw;
-  height: 8vw;
+  width: 73vw;
+  height: 5vw;
 }
 
 .messages {
@@ -149,3 +150,6 @@ ul li a:active {
   height: 35vw;
 }
 
+#message-box:focus {
+  font-size: x-large;
+}
