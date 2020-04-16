@@ -3,8 +3,6 @@
     load the chat conten
 */
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('form').onsubmit = () => {
-        alert("test");
-        return true;
-    };
+    const displayName = document.querySelector("#name").innerHTML;
+    localStorage.setItem('name', displayName)
 });

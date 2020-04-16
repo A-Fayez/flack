@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
 <h1>Welcome to Flack</h1>
 <div class="display"> 
     <form action="{{ url_for('join') }}" method="POST">

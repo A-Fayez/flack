@@ -3,11 +3,12 @@
     Flack
 {% endblock %}
 {% block body %}
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
 <div class="side-bar">
 
     <div class="header-info">
         <span id="online"></span>
-        <span id="name"><b>{{ display_name }}</b></span>
+        <span id="name">{{ display_name }}</span>
     </div>
 
     <div class="channels-section">

@@ -13,21 +13,11 @@ users = []
 def index():
     return render_template("display.html")
 
-@app.route("/content", methods=["GET"])
-def content():
+@app.route("/chat", methods=["GET"])
+def chat():
+    name = request.args.get("name")
+    return render_template("chat.html", display_name=name)
 
-    name = request.args.get('name')
-
-    if name == 'null' or name is None:
-        with app.open_resource('templates/display.html') as f:
-            return f.read()
-  
-    # TODO :check if user isn't registered, if already registered
-    # roll back to last if
-    with app.open_resource('templates/chat.html') as f:
-        html_body = f.read()
-
-    return html_body
 
 # TODO: check if user already exists
 @app.route("/join", methods=["POST"])
