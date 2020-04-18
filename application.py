@@ -29,6 +29,10 @@ def join():
     print(users) # for debugging
     return render_template("chat.html", display_name=name)
 
+# TODO: 
+@app.route("/popup", methods=["GET"])
+def popup():
+    return "TEST POPUP"
 
 if __name__ == '__main__':
     socketio.run(app)

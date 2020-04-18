@@ -15,10 +15,11 @@ body {
 
 h1 {
     grid-area: 1 / 2 / 2 / 3;
-    font-size: 80px;
+    font-size: 5em;
     text-shadow: rgb(139, 139, 139) 1px 0 10px;
     -webkit-text-stroke: 2px white;
     color: black;
+    overflow: hidden;
 }
 
 p {

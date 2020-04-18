@@ -31,8 +31,6 @@
 }
   
 .side-bar {
-    @include flexbox();
-    position: relative;
     height: 100%;
     width: 100%;
     grid-area: 1 / 1 / 5 / 2;
@@ -90,6 +88,7 @@
   color: wheat;
   text-decoration: none;
   font-size: xx-large;
+  overflow: hidden
 }
 
 .channels {
@@ -126,30 +125,39 @@ ul li a:hover,
 
 .input-message-area {
   grid-area: 4 / 2 / 5 / 4;
-  @include flexbox();
-  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
 }
 
-#message-box {
-  place-self: start;
-  border: 1.1px solid black;
+#new-message-box {
+  position: relative;
   border-radius: 3%;
-  width: 73vw;
-  height: 5vw;
+  width: 90%;
+  height: 80%;
+  left: 3%;
+
 }
+
+#new-message-box:focus {
+  font-size: x-large;
+}
+
 
 .messages {
   grid-area: 1 / 2 / 4 / 4;
   width: 100%;
   height: 100%;
+}
+
+#chat-box {
+  position: relative;
+  width: 90%;
+  height: 90%;
+  left: 3%;
   background-color: rgb(216, 213, 216);
   border-radius: 5%;;
   margin-right: 2%;
   margin-top: 3%;
-  width: 74vw;
-  height: 38vw;
 }
 
-#message-box:focus {
-  font-size: x-large;
-}
+
