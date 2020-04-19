@@ -83,6 +83,8 @@
 
 #new-channel-btn {
   position: relative;
+  background-color: #3F0E40;
+  border: none;
   top: -4%;
   left: 30%;
   color: wheat;
@@ -168,7 +170,7 @@ ul li a:hover,
   width: 100%;
   background: rgba(0, 0, 0, 0.6);
   z-index: 1;
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   text-align: center;
