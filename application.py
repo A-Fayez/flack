@@ -13,21 +13,22 @@ users = []
 def index():
     return render_template("display.html")
 
-@app.route("/chat", methods=["GET"])
+@app.route("/chat", methods=["GET", "POST"])
 def chat():
-    name = request.args.get("name")
-    return render_template("chat.html", display_name=name)
 
+    if request.method == "GET":
+        name = request.args.get("name")
+        return render_template("chat.html", display_name=name)
 
-# TODO: check if user already exists
-@app.route("/join", methods=["POST"])
-def join():
+    # authenticate 
+    elif request.method == "POST":
+        name = request.form.get("name")
+        if name.lower() in users: # display name conflicts
+            return render_template("display.html", auth="False")
+        
+        users.append(name.lower())
+        return render_template("chat.html", display_name=name)
 
-    name = request.form.get("name")
-    if name not in users:
-        users.append(name)
-    print(users) # for debugging
-    return render_template("chat.html", display_name=name)
 
 # TODO: 
 @app.route("/popup", methods=["GET"])

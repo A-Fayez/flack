@@ -197,11 +197,8 @@ ul li a:hover,
 
 .popup-content button {
   display: inline-block;
-  float: right;
   padding: 10px;
-  margin: 25px 25px 25px 5px;
-  top: 53%;
-  right: 25%;
+  margin: 40% 5% 0 0;
   border: 1.2px solid #3F0E40;
   border-radius: 5%;
 }
@@ -209,6 +206,7 @@ ul li a:hover,
 #create {
   background: #3F0E40;
   color: white;
+  font-size: larger;
 }
 
 #cancel {
@@ -223,6 +221,8 @@ ul li a:hover,
   height: 13%;
   top: 45%;
   left: 20%;
+  font-size: larger;
+
 }
 
 .popup-content label {
