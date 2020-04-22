@@ -44,12 +44,13 @@ def channels():
 
     # Make sure of receiving a valid json request
     elif request.method == "POST":
-        if len(request.json.keys()) != 1 and request.json.keys()[0] != "chName":
-            return 400
+        if len(request.json.keys()) != 1 or list(request.json.keys())[0] != "chName":
+            print(list(request.json.keys())[0])
+            return jsonify({"status": "400", "message": "Bad request"}), 400
         
         channel_name = request.json.get("chName")
         if channel_name in channels_list:
-            return jsonify({"valid": False})
+            return jsonify({"valid": False}), 409
 
         channels_list.append(channel_name)
         return jsonify({"valid": True})

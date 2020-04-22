@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const popup = document.querySelector(".popup");
     document.querySelector("#new-channel-btn").onclick = () => {
         popup.style.display = "flex";
+        document.querySelector(".popup input").focus();
     };
     document.querySelector("#cancel").onclick = () => {
         popup.style.display = "none";
@@ -16,9 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector("#create").onclick = () => {
         const channelName = document.querySelector("#new-channel-name").value;
         postRequest("/channels", {"chName": channelName})
-        .then(respone => { 
-            if (respone.valid){
-                console.log(respone);
+        .then(response => {
+            if (response.valid) {
+                newChannelCreated();
+            }
+            else if (!response.valid) {
+                duplicateChannelName();
             }
         })
         .catch(e => console.log(e));
@@ -34,3 +38,19 @@ async function postRequest(url = '', data = {}) {
 
     return response.json();
 }
+
+function duplicateChannelName() {
+    // position: relative; margin: 0 auto; color: red; top:1100%;
+    const label = document.createElement("label");
+    label.innerHTML = "A channel with the same name already  exists.";
+    label.style.color = "red";
+    label.style.position = "relative";
+    label.style.margin = "0 auto";
+    label.style.top = "-50%";
+    document.querySelector(".popup-content").appendChild(label);
+}
+
+function newChannelCreated() {
+    // TODO 
+}
+
