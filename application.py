@@ -8,7 +8,7 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
 users = []
-channels = []
+channels_list = []
 messages = {} # K: <string>, V: <dict, k:<string(user)>, v:<list of string messages>
 
 @app.route("/")
@@ -33,7 +33,6 @@ def chat():
     return 405
 
 
-# TODO: 
 @app.route("/channels", methods=["GET", "POST"])
 def channels():
     """An endpoint that returns a list of previously created channels
@@ -41,13 +40,21 @@ def channels():
     POST request.
     """
     if request.method == "GET":
-        return jsonify({
-                    "channels": channels
-                 })
+        return jsonify({"channels": channels_list})
 
+    # Make sure of receiving a valid json request
     elif request.method == "POST":
-        # TODO: get JSON data and append to channels list
+        if len(request.json.keys()) != 1 and request.json.keys()[0] != "chName":
+            return 400
+        
+        channel_name = request.json.get("chName")
+        if channel_name in channels_list:
+            return jsonify({"valid": False})
 
+        channels_list.append(channel_name)
+        return jsonify({"valid": True})
+    
+    return 405
 
 if __name__ == '__main__':
     socketio.run(app)

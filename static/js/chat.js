@@ -1,7 +1,3 @@
-/*
-    Handles user registration with a display name
-    load the chat conten
-*/
 document.addEventListener('DOMContentLoaded', () => {
 
     const displayName = document.querySelector("#name").innerHTML;
@@ -18,8 +14,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // creating new channel
     document.querySelector("#create").onclick = () => {
-        // TODO:  
+        const channelName = document.querySelector("#new-channel-name").value;
+        postRequest("/channels", {"chName": channelName})
+        .then(respone => { 
+            if (respone.valid){
+                console.log(respone);
+            }
+        })
+        .catch(e => console.log(e));
     };
-
-
 });
+
+async function postRequest(url = '', data = {}) {
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+
+    return response.json();
+}
