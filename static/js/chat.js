@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const popup = document.querySelector(".popup");
     document.querySelector("#new-channel-btn").onclick = () => {
         popup.style.display = "flex";
+        document.querySelector(".popup input").value = "";
         document.querySelector(".popup input").focus();
     };
     document.querySelector("#cancel").onclick = () => {
@@ -47,10 +48,13 @@ function duplicateChannelName() {
     label.style.position = "relative";
     label.style.margin = "0 auto";
     label.style.top = "-50%";
+    label.style.fontSize = "smaller";
     document.querySelector(".popup-content").appendChild(label);
 }
 
+// TODO:
 function newChannelCreated() {
-    // TODO 
+    const channel = document.createElement("li");
+    document.querySelector(".channels").appendChild(channel);
 }
 

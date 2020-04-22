@@ -57,5 +57,9 @@ def channels():
     
     return 405
 
+@app.route("/channel", methods=["GET"])
+def test():
+    return "TEST"
+    
 if __name__ == '__main__':
     socketio.run(app)
