@@ -44,6 +44,7 @@ def channels():
 
     # Make sure of receiving a valid json request
     elif request.method == "POST":
+        print(channels_list)
         if len(request.json.keys()) != 1 or list(request.json.keys())[0] != "chName":
             print(list(request.json.keys())[0])
             return jsonify({"status": "400", "message": "Bad request"}), 400
@@ -59,7 +60,13 @@ def channels():
 
 @app.route("/channel", methods=["GET"])
 def test():
-    return "TEST"
+    channel_name = request.args.get("name")
+    print(f"inside test view function with channel {channel_name}")
+    print(request.args)
+    return jsonify({
+        "channel": channel_name,
+        "message": f"{channel_name}'s message test'"
+    })
     
 if __name__ == '__main__':
     socketio.run(app)

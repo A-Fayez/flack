@@ -20,7 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
         postRequest("/channels", {"chName": channelName})
         .then(response => {
             if (response.valid) {
-                newChannelCreated();
+                createNewChannel(channelName);
+                popup.style.display = "none";
+                console.log("channel created");
             }
             else if (!response.valid) {
                 duplicateChannelName();
@@ -28,6 +30,18 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(e => console.log(e));
     };
+
+    // channel links onclick behaviour, to get messages
+    document.querySelectorAll(".ch-link").forEach(link => {
+        const channelName = link.innerHTML;
+        link.onclick = () => {
+            console.log(`clicked on channel ${channelName}`)
+            getMessages(channelName)
+            .then(messages => console.log(messages));
+            return false;
+        }
+    })
+
 });
 
 async function postRequest(url = '', data = {}) {
@@ -37,6 +51,14 @@ async function postRequest(url = '', data = {}) {
         body: JSON.stringify(data)
     });
 
+    return response.json();
+}
+
+// returns a promise and use it to parse incoming messages as json
+async function getMessages(channelName) {
+    channelName = channelName.replace(/\s+/g,"+"); // handle spaces in query params
+    console.log(`inside get msgs func with url: /channel?name=${channelName}`);
+    const response = await fetch(`/channel?name=${channelName}`);
     return response.json();
 }
 
@@ -53,8 +75,13 @@ function duplicateChannelName() {
 }
 
 // TODO:
-function newChannelCreated() {
+function createNewChannel(channelName) {
     const channel = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = "";
+    link.className = "ch-link";
+    link.innerHTML = channelName;
+    channel.appendChild(link);
     document.querySelector(".channels").appendChild(channel);
 }
 
