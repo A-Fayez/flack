@@ -61,6 +61,9 @@ def channels():
 @app.route("/channel", methods=["GET"])
 def test():
     channel_name = request.args.get("name")
+    if channel_name not in channels_list:
+        return jsonify({"status": "400", "message": "Bad request"}), 400
+
     print(f"inside test view function with channel {channel_name}")
     print(request.args)
     return jsonify({

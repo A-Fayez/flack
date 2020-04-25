@@ -39,8 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
             getMessages(channelName)
             .then(messages => console.log(messages));
             return false;
-        }
-    })
+        };
+    });
 
 });
 
@@ -56,9 +56,9 @@ async function postRequest(url = '', data = {}) {
 
 // returns a promise and use it to parse incoming messages as json
 async function getMessages(channelName) {
-    channelName = channelName.replace(/\s+/g,"+"); // handle spaces in query params
-    console.log(`inside get msgs func with url: /channel?name=${channelName}`);
-    const response = await fetch(`/channel?name=${channelName}`);
+    const url = new URL("/channel", window.location.origin);
+    url.searchParams.append("name", channelName);
+    const response = await fetch(url);
     return response.json();
 }
 
