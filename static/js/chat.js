@@ -41,16 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(e => console.log(e));
     };
 
-    // channel links onclick behaviour, to get messages
-    document.querySelectorAll(".ch-link").forEach(link => {
-    const channelName = link.innerHTML;
-    link.onclick = () => {
-            console.log(`clicked on channel ${channelName}`)
-            getMessages(channelName)
-            .then(messages => console.log(messages));
-            return false;
-        };
-    });
 });
 
 async function postRequest(url = '', data = {}) {
@@ -65,7 +55,7 @@ async function postRequest(url = '', data = {}) {
 
 // returns a promise and use it to parse incoming messages as json
 async function getMessages(channelName) {
-    const url = new URL("/channel", window.location.origin);
+    const url = new URL("/messages", window.location.origin);
     url.searchParams.append("name", channelName);
     const response = await fetch(url);
     return response.json();
@@ -89,6 +79,12 @@ function createNewChannel(channelName) {
     const link = document.createElement("a");
     link.href = "";
     link.className = "ch-link";
+    link.onclick = () => {     
+        console.log(`clicked on channel ${channelName}`);
+        getMessages(channelName)
+        .then(messages => console.log(messages));
+        return false; 
+    }
     link.innerHTML = "\xa0 # \xa0" + channelName;
     channel.appendChild(link);
     document.querySelector(".channels").appendChild(channel);

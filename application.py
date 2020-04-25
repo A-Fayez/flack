@@ -58,9 +58,10 @@ def channels():
     
     return 405
 
-@app.route("/channel", methods=["GET"])
-def test():
+@app.route("/messages", methods=["GET"])
+def messages():
     channel_name = request.args.get("name")
+    print(channel_name)
     if channel_name not in channels_list:
         return jsonify({"status": "400", "message": "Bad request"}), 400
 

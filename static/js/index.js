@@ -5,7 +5,6 @@ if (displayName) {
 
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("form input[type='text']").focus();
-
 });
 
 
