@@ -8,7 +8,7 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
 users = []
-channels_list = []
+channels_list = ["general", "bots", "random"]
 messages = {} # K: <string>, V: <dict, k:<string(user)>, v:<list of string messages>
 
 @app.route("/")

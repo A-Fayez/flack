@@ -3,6 +3,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const displayName = document.querySelector("#name").innerHTML;
     localStorage.setItem('name', displayName);
 
+    // list previously created channels 
+    fetch("/channels")
+    .then(response => response.json())
+    .then((channelsJSON) => {
+        channelsJSON['channels'].forEach((channelName) => {
+            createNewChannel(channelName);
+        });
+    })
+
+
     // control displaying of popup
     const popup = document.querySelector(".popup");
     document.querySelector("#new-channel-btn").onclick = () => {
@@ -33,15 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // channel links onclick behaviour, to get messages
     document.querySelectorAll(".ch-link").forEach(link => {
-        const channelName = link.innerHTML;
-        link.onclick = () => {
+    const channelName = link.innerHTML;
+    link.onclick = () => {
             console.log(`clicked on channel ${channelName}`)
             getMessages(channelName)
             .then(messages => console.log(messages));
             return false;
         };
     });
-
 });
 
 async function postRequest(url = '', data = {}) {
@@ -80,7 +89,7 @@ function createNewChannel(channelName) {
     const link = document.createElement("a");
     link.href = "";
     link.className = "ch-link";
-    link.innerHTML = channelName;
+    link.innerHTML = "\xa0 # \xa0" + channelName;
     channel.appendChild(link);
     document.querySelector(".channels").appendChild(channel);
 }
