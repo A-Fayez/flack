@@ -79,7 +79,8 @@ function createNewChannel(channelName) {
     const link = document.createElement("a");
     link.href = "";
     link.className = "ch-link";
-    link.onclick = () => {     
+    link.onclick = function() {    
+        keepActive(this); 
         console.log(`clicked on channel ${channelName}`);
         getMessages(channelName)
         .then(messages => console.log(messages));
@@ -88,5 +89,13 @@ function createNewChannel(channelName) {
     link.innerHTML = "\xa0 # \xa0" + channelName;
     channel.appendChild(link);
     document.querySelector(".channels").appendChild(channel);
+}
+
+function keepActive(a) {
+    items = document.querySelectorAll('.ch-link.active');
+    if (items.length) {
+        items[0].className = 'ch-link';
+    }
+    a.className = 'ch-link active';
 }
 
