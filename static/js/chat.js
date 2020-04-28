@@ -43,6 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+// returns a promise from sending a post request with desired api url 
+// and post data
 async function postRequest(url = '', data = {}) {
     const response = await fetch(url, {
         method: 'POST',
@@ -92,9 +94,9 @@ function createNewChannel(channelName) {
 }
 
 function keepActive(a) {
-    items = document.querySelectorAll('.ch-link.active');
-    if (items.length) {
-        items[0].className = 'ch-link';
+    activeLinks = document.querySelectorAll('.ch-link.active');
+    if (activeLinks.length) {
+        activeLinks[0].className = 'ch-link';
     }
     a.className = 'ch-link active';
 }
