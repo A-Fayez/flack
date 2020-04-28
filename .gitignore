@@ -1,5 +1,6 @@
 static/node_modules/*
 static/css/chat.css
+static/css/style.css
 instance/*
 !instance/.gitignore
 .webassets-cache
