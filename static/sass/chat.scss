@@ -1,3 +1,31 @@
+@mixin text($color, $size) {
+  color: $color;
+  font-size: $size;
+  -webkit-text-stroke-width: 0.4px;
+  -webkit-text-stroke-color: black;
+  letter-spacing : 0.05em;
+}
+
+@mixin chat-bubble($own: false) {
+  min-width: 60px;
+	max-width: 100%;
+	padding: 14px 18px;
+  margin: 6px 8px;
+  border-radius: 16px 16px 0 16px;
+
+  @if $own {
+    background-color: #6C8EA4;
+    border: 1px solid #54788e;
+  }
+
+  @else {
+    background-color: #5b5377;
+    border: 1px solid #443f56;
+  }
+
+}
+
+
 * {
   margin: 0;
   padding: 0;
@@ -90,14 +118,6 @@ form button:hover,
 .popup-content button:hover  {
   background-color: white !important;
   color: #3F0E40 !important;
-}
-
-@mixin text($color, $size) {
-    color: $color;
-    font-size: $size;
-    -webkit-text-stroke-width: 0.4px;
-    -webkit-text-stroke-color: black;
-    letter-spacing : 0.05em;
 }
   
 .side-bar {
@@ -203,10 +223,10 @@ ul li a:hover,
 #new-message-box {
   position: relative;
   z-index: 1;
-  top:13%;
+  top:30%;
   border-radius: 3%;
   width: 90%;
-  height: 60%;
+  height: 50%;
   left: 3%;
 }
 
@@ -229,6 +249,7 @@ ul li a:hover,
   border-radius: 5%;;
   margin-right: 2%;
   margin-top: 1%;
+  overflow: auto;
 }
 
 /* New channel popup window */
@@ -298,4 +319,25 @@ ul li a:hover,
   top:30%;
   font-size: larger;
   font-weight: bolder;
+}
+
+// chat bubbles
+.bubble-wrapper {
+	padding: 10px 10px;
+	display: flex;
+	justify-content: flex-end;
+	flex-direction: column;
+	align-self: flex-end;
+  color: #fff;
+}
+
+.inlineContainer {
+  display: inline-flex;
+}
+
+.msg-bubble.own {
+  @include chat-bubble($own: true);
+}
+.msg-bubble.other {
+  @include chat-bubble($own: false);
 }
