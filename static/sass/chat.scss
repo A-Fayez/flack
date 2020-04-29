@@ -1,3 +1,5 @@
+$theme-coloer: #3F0E40;
+
 @mixin text($color, $size) {
   color: $color;
   font-size: $size;
@@ -92,12 +94,12 @@ form input[type=text] {
   text-align: center;
   top: 40%;
   left: 10%;
-  border: 2px solid #3F0E40;
+  border: 2px solid $theme-coloer;
   border-radius: 10px;
 
 }
 form input[type=text]:focus {
-  border-color: #3F0E40;
+  border-color: $theme-coloer;
 }
 
 form button {
@@ -107,7 +109,7 @@ form button {
   top: 70%;
   width: 140px;
   height: 40px;
-  background-color: #3F0E40;
+  background-color: $theme-coloer;
   border: 1.7px solid black;
   border-radius: 10px;
   font-size: 20px;
@@ -117,7 +119,7 @@ form button {
 form button:hover,
 .popup-content button:hover  {
   background-color: white !important;
-  color: #3F0E40 !important;
+  color: $theme-coloer !important;
 }
   
 .side-bar {
@@ -172,7 +174,7 @@ form button:hover,
 
 #new-channel-btn {
   position: relative;
-  background-color: #3F0E40;
+  background-color: $theme-coloer;
   border: none;
   top: -4%;
   left: 30%;
@@ -220,20 +222,43 @@ ul li a:hover,
   height: 100%;
 }
 
-#new-message-box {
+.new-msg-wrapper {
   position: relative;
   z-index: 1;
   top:30%;
   border-radius: 3%;
-  width: 90%;
-  height: 50%;
-  left: 3%;
+  width: 100%;
+  height: 70%;
+  background-color: white;
 }
+
+
+#new-message-box {
+  position: relative;
+  z-index: 1;
+  border-radius: 3%;
+  top: 5%;
+  width: 90%;
+  height: 70%;
+  left: 1%;
+}
+
 
 #new-message-box:focus {
   font-size: x-large;
 }
 
+.send {
+  position: relative;
+  color: white;
+  height: 50%;
+  width: 5%;
+  top: -25%;
+  margin-left: 1%;
+  background-color: $theme-coloer;
+  border-radius: 16px;
+  border: 1px solid #443f56;
+}
 
 .messages {
   grid-area: 1 / 2 / 5 / 4;
@@ -271,7 +296,7 @@ ul li a:hover,
   height: 50%;
   width: 40%;
   background: white;
-  border: 2px solid #3F0E40;
+  border: 2px solid $theme-coloer;
   border-radius: 5%;
 }
 
@@ -289,12 +314,12 @@ ul li a:hover,
   display: inline-block;
   padding: 10px;
   margin: 32% 5% 0 0;
-  border: 1.2px solid #3F0E40;
+  border: 1.2px solid $theme-coloer;
   border-radius: 5%;
 }
 
 #create {
-  background: #3F0E40;
+  background: $theme-coloer;
   color: white;
   font-size: larger;
 }
@@ -305,7 +330,7 @@ ul li a:hover,
 }
 
 #new-channel-name {
-  border: 2px solid #3F0E40;
+  border: 2px solid $theme-coloer;
   border-radius: 5px;
   width: 60%;
   height: 13%;
@@ -322,6 +347,7 @@ ul li a:hover,
 }
 
 // chat bubbles
+
 .bubble-wrapper {
 	padding: 10px 10px;
 	display: flex;
@@ -340,4 +366,25 @@ ul li a:hover,
 }
 .msg-bubble.other {
   @include chat-bubble($own: false);
+}
+
+// chat box scrollbar
+#chat-box::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+#chat-box::-webkit-scrollbar
+{
+	width: 8px;
+	background-color: #F5F5F5;
+}
+
+#chat-box::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
 }
