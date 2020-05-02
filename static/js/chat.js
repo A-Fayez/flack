@@ -3,14 +3,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const displayName = document.querySelector("#name").innerHTML;
     localStorage.setItem('name', displayName);
 
+    // used to execute displaying of messages box and new message are
+    // only once
+    // TODO: might get in your way of implementing remembering the channel
+    var anyLinkClicked = false; 
+
     // list previously created channels 
     fetch("/channels")
     .then(response => response.json())
     .then((channelsJSON) => {
         channelsJSON['channels'].forEach((channelName) => {
-            createNewChannel(channelName);
+            createNewChannelElement(channelName);
         });
     })
+
+    // socket commincation and controlling of sending/receiving messages
+
+
+
+
 
 
     // control displaying of popup
@@ -30,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         postRequest("/channels", {"chName": channelName})
         .then(response => {
             if (response.valid) {
-                createNewChannel(channelName);
+                createNewChannelElement(channelName);
                 popup.style.display = "none";
                 console.log("channel created");
             }
@@ -42,6 +53,60 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 });
+
+// Helper functions
+
+// displays an alert message if user tried to create a channel a name 
+// that conflicts with a created channel
+function duplicateChannelName() {
+    // position: relative; margin: 0 auto; color: red; top:1100%;
+    const label = document.createElement("label");
+    label.innerHTML = "A channel with the same name already  exists.";
+    label.style.color = "red";
+    label.style.position = "relative";
+    label.style.margin = "0 auto";
+    label.style.top = "-50%";
+    label.style.fontSize = "smaller";
+    document.querySelector(".popup-content").appendChild(label);
+}
+
+// Creates a new list item representing the channel
+// this function is used at the initial loading of the page to fetch 
+// previously created channels and gets their messages sent in them if there are any.
+// Note: new created channels will receive null on messages key
+function createNewChannelElement(channelName) {
+    const channel = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = "";
+    link.className = "ch-link";
+    link.onclick = function() {    
+        keepActive(this); 
+
+        // show new message box 
+        if (!window.anyLinkClicked) {
+            anyLinkClicked = true;
+            document.querySelectorAll(".input-message-area, .messages").forEach((element) => {
+                element.style.display = "flex";
+            });
+         }
+         
+        console.log(`clicked on channel ${channelName}`);
+        getMessages(channelName)
+        .then(messages => console.log(messages)); //TODO: display messages in their dom template
+        return false; 
+    }
+    link.innerHTML = "\xa0 # \xa0" + channelName;
+    channel.appendChild(link);
+    document.querySelector(".channels").appendChild(channel);
+}
+
+function keepActive(a) {
+    activeLinks = document.querySelectorAll('.ch-link.active');
+    if (activeLinks.length) {
+        activeLinks[0].className = 'ch-link';
+    }
+    a.className = 'ch-link active';
+}
 
 // returns a promise from sending a post request with desired api url 
 // and post data
@@ -61,43 +126,5 @@ async function getMessages(channelName) {
     url.searchParams.append("name", channelName);
     const response = await fetch(url);
     return response.json();
-}
-
-function duplicateChannelName() {
-    // position: relative; margin: 0 auto; color: red; top:1100%;
-    const label = document.createElement("label");
-    label.innerHTML = "A channel with the same name already  exists.";
-    label.style.color = "red";
-    label.style.position = "relative";
-    label.style.margin = "0 auto";
-    label.style.top = "-50%";
-    label.style.fontSize = "smaller";
-    document.querySelector(".popup-content").appendChild(label);
-}
-
-// TODO:
-function createNewChannel(channelName) {
-    const channel = document.createElement("li");
-    const link = document.createElement("a");
-    link.href = "";
-    link.className = "ch-link";
-    link.onclick = function() {    
-        keepActive(this); 
-        console.log(`clicked on channel ${channelName}`);
-        getMessages(channelName)
-        .then(messages => console.log(messages));
-        return false; 
-    }
-    link.innerHTML = "\xa0 # \xa0" + channelName;
-    channel.appendChild(link);
-    document.querySelector(".channels").appendChild(channel);
-}
-
-function keepActive(a) {
-    activeLinks = document.querySelectorAll('.ch-link.active');
-    if (activeLinks.length) {
-        activeLinks[0].className = 'ch-link';
-    }
-    a.className = 'ch-link active';
 }
 

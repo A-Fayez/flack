@@ -7,13 +7,25 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
-users = []
+users = ["John Doe", "Jane Doe"]
 channels_list = ["general", "bots", "random"]
-messages = {} # K: <string>, V: <dict, k:<string(user)>, v:<list of string messages>
+# K: <string(chName)>, V: stack of messages (list) each element in list is dict with K:user V: msg
+messages_memory = {"general": [ { 
+                                  "user": "John Doe",
+                                  "timestamp": "11:10 AM",
+                                  "message": "Hi jane"
+                                }, {
+                                    "user": "Jane Doe",
+                                    "timestamp": "11:11 AM",
+                                    "message": "Hi john"
+                                }
+                            ]
+                } 
+
 
 @app.route("/")
 def index():
-    return render_template("display.html")
+    return render_template("index.html")
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
@@ -22,12 +34,15 @@ def chat():
         name = request.args.get("name")
         return render_template("chat.html", display_name=name)
 
-    # authenticate 
+    # authenticate
+    # we want no display name conflicts and at the same time we want to display
+    # them as typed, hence using the map function 
     elif request.method == "POST":
         name = request.form.get("name")
-        if name.lower() in users: # display name conflicts
-            return render_template("display.html", auth="False")
-        users.append(name.lower())
+        if name.lower() in list(map(lambda x:x.lower(), users)): # display name conflicts
+            return render_template("index.html", auth="False")
+        users.append(name)
+        print(users)
         return render_template("chat.html", display_name=name)
     
     return 405
@@ -42,7 +57,7 @@ def channels():
     if request.method == "GET":
         return jsonify({"channels": channels_list})
 
-    # Make sure of receiving a valid json request
+    # Make sure of receiving a valid post json request
     elif request.method == "POST":
         print(channels_list)
         if len(request.json.keys()) != 1 or list(request.json.keys())[0] != "chName":
@@ -60,6 +75,10 @@ def channels():
 
 @app.route("/messages", methods=["GET"])
 def messages():
+    """returns a json representation of previously sent messages in the channel name
+    specified in the url query param.
+    """
+
     channel_name = request.args.get("name")
     print(channel_name)
     if channel_name not in channels_list:
@@ -69,7 +88,7 @@ def messages():
     print(request.args)
     return jsonify({
         "channel": channel_name,
-        "message": f"{channel_name}'s message test'"
+        "messages": messages_memory.get(channel_name)
     })
     
 if __name__ == '__main__':

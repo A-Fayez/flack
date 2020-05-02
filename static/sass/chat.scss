@@ -9,24 +9,25 @@ $theme-coloer: #3F0E40;
 }
 
 @mixin chat-bubble($own: false) {
+  position: relative;
   min-width: 60px;
 	max-width: 100%;
 	padding: 14px 18px;
-  margin: 6px 8px;
-  border-radius: 16px 16px 0 16px;
+  margin: 20px 8px;
+  border-radius: 16px 16px 16px 0px;
+  color: black;
 
   @if $own {
-    background-color: #6C8EA4;
-    border: 1px solid #54788e;
+    background-color: #4fb8e7;
+    border: 1px solid #93b6cc;
   }
 
   @else {
-    background-color: #5b5377;
-    border: 1px solid #443f56;
+    background-color: white;
+    border: 1px solid white;
   }
 
 }
-
 
 * {
   margin: 0;
@@ -220,6 +221,7 @@ ul li a:hover,
   grid-area: 4 / 2 / 5 / 4;
   width: 100%;
   height: 100%;
+  display: none; // Will get visible once new users enter a channel
 }
 
 .new-msg-wrapper {
@@ -258,12 +260,14 @@ ul li a:hover,
   background-color: $theme-coloer;
   border-radius: 16px;
   border: 1px solid #443f56;
+
 }
 
 .messages {
   grid-area: 1 / 2 / 5 / 4;
   width: 100%;
   height: 100%;
+  display: none;
 }
 
 #chat-box {
@@ -347,7 +351,6 @@ ul li a:hover,
 }
 
 // chat bubbles
-
 .bubble-wrapper {
 	padding: 10px 10px;
 	display: flex;
@@ -368,10 +371,23 @@ ul li a:hover,
   @include chat-bubble($own: false);
 }
 
+.msg-bubble.own span.sender,
+.msg-bubble.other span.sender{
+  color: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 8px 20px;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+
 // chat box scrollbar
 #chat-box::-webkit-scrollbar-track
 {
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 	border-radius: 10px;
 	background-color: #F5F5F5;
 }
@@ -385,6 +401,7 @@ ul li a:hover,
 #chat-box::-webkit-scrollbar-thumb
 {
 	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 	background-color: #555;
 }
