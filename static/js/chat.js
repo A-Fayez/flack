@@ -1,5 +1,8 @@
-document.addEventListener('DOMContentLoaded', () => {
+const message_template = Handlebars.compile(document.querySelector("#message").innerHTML);
 
+document.addEventListener('DOMContentLoaded', () => {
+    const test = message_template({'source': "own", "sender": "fayez", "message": "hi"});
+    console.log(test); 
     const displayName = document.querySelector("#name").innerHTML;
     localStorage.setItem('name', displayName);
 
@@ -18,10 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // socket commincation and controlling of sending/receiving messages
-
-
-
-
 
 
     // control displaying of popup
@@ -79,7 +78,7 @@ function createNewChannelElement(channelName) {
     const link = document.createElement("a");
     link.href = "";
     link.className = "ch-link";
-    link.onclick = function() {    
+    link.onclick = function() {   
         keepActive(this); 
 
         // show new message box 
@@ -92,7 +91,7 @@ function createNewChannelElement(channelName) {
          
         console.log(`clicked on channel ${channelName}`);
         getMessages(channelName)
-        .then(messages => console.log(messages)); //TODO: display messages in their dom template
+        .then(messages => console.log(messages)); //TODO: display messages in their handlebar template
         return false; 
     }
     link.innerHTML = "\xa0 # \xa0" + channelName;

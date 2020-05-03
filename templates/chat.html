@@ -3,7 +3,15 @@
     Flack
 {% endblock %}
 {% block body %}
+
+{% raw -%}
+<script id="message" type="text/x-handlebars-template">
+    <div class="msg-bubble {{source}}"><span class="sender">{{sender}}</span><br>{{message}}</div> 
+</script>
+{%- endraw %}
+
 <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+
 <div class="side-bar">
 
     <div class="header-info">
@@ -35,8 +43,8 @@
         <div class="bubble-wrapper">
             <div class="inline-container">
                 <!-- Message bubble template-->
-                <div class="msg-bubble own"> <span class="sender">Fayez</span><br> Test msg</div> 
-                <div class="msg-bubble other"> <span class="sender">Mohmaed</span><br> Test msg</div>     
+                <div class="msg-bubble own"> <span class="sender">Fayez</span><span class="timestamp">11:10 AM</span><br> Test msg</div> 
+                <div class="msg-bubble other"> <span class="sender">Mohmaed</span><span class="timestamp">11:11 AM</span><br> Test msg</div>     
             </div>
         </div>
     </div>
