@@ -91,7 +91,26 @@ function createNewChannelElement(channelName) {
          
         console.log(`clicked on channel ${channelName}`);
         getMessages(channelName)
-        .then(messages => console.log(messages)); //TODO: display messages in their handlebar template
+        .then((messages) => {
+            // an assertion that we got the right messages from the server
+            if (messages.channel !== channelName) {
+                console.log("channel name bad request");
+                throw new Error("Something is wrong");
+            }
+
+            // display messages in their handlebars template
+            const message_wrapper = document.querySelector(".inline-container");
+            messages["messages"].forEach((message) => {
+                const message_bubble = message_template({
+                    "source": "own", // TODO
+                    "sender": message.user,
+                    "timestamp": "11:10 AM", //TODO
+                    "message": message["text"]
+                });
+                message_wrapper.innerHTML += message_bubble;
+            });
+
+        }); 
         return false; 
     }
     link.innerHTML = "\xa0 # \xa0" + channelName;

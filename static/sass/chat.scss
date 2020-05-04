@@ -382,6 +382,11 @@ ul li a:hover,
   font-weight: bold;
 }
 
+.timestamp {
+  position: relative;
+  float: right;
+  
+}
 
 // chat box scrollbar
 #chat-box::-webkit-scrollbar-track

@@ -6,7 +6,7 @@
 
 {% raw -%}
 <script id="message" type="text/x-handlebars-template">
-    <div class="msg-bubble {{source}}"><span class="sender">{{sender}}</span><br>{{message}}</div> 
+    <div class="msg-bubble {{source}}"><span class="sender">{{sender}}</span><span class="timestamp">{{timestamp}}</span><br>{{message}}</div> 
 </script>
 {%- endraw %}
 
@@ -42,9 +42,7 @@
     <div id="chat-box">
         <div class="bubble-wrapper">
             <div class="inline-container">
-                <!-- Message bubble template-->
-                <div class="msg-bubble own"> <span class="sender">Fayez</span><span class="timestamp">11:10 AM</span><br> Test msg</div> 
-                <div class="msg-bubble other"> <span class="sender">Mohmaed</span><span class="timestamp">11:11 AM</span><br> Test msg</div>     
+                <!-- Message bubble template-->    
             </div>
         </div>
     </div>

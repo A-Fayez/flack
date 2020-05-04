@@ -13,11 +13,11 @@ channels_list = ["general", "bots", "random"]
 messages_memory = {"general": [ { 
                                   "user": "John Doe",
                                   "timestamp": "11:10 AM",
-                                  "message": "Hi jane"
+                                  "text": "Hi jane"
                                 }, {
                                     "user": "Jane Doe",
                                     "timestamp": "11:11 AM",
-                                    "message": "Hi john"
+                                    "text": "Hi john"
                                 }
                             ]
                 } 
