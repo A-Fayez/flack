@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         postRequest("/channels", {"chName": channelName})
         .then(response => {
             if (response.valid) {
-                createNewChannelElement(channelName);
+                createNewChannelElement(channelName, true);
                 popup.style.display = "none";
                 console.log("channel created");
             }
@@ -73,14 +73,14 @@ function duplicateChannelName() {
 // this function is used at the initial loading of the page to fetch 
 // previously created channels and gets their messages sent in them if there are any.
 // Note: new created channels will receive null on messages key
-function createNewChannelElement(channelName) {
+function createNewChannelElement(channelName, just_created = false) {
     const channel = document.createElement("li");
     const link = document.createElement("a");
+    link.innerHTML = "\xa0 # \xa0" + channelName;
     link.href = "";
     link.className = "ch-link";
     link.onclick = function() {   
         keepActive(this); 
-
         // show new message box 
         if (!window.anyLinkClicked) {
             anyLinkClicked = true;
@@ -88,10 +88,17 @@ function createNewChannelElement(channelName) {
                 element.style.display = "flex";
             });
          }
-         
+
+         // implies a newly created channel
+        // skip fetchin messages
+        if (just_created) {
+            return false;
+        }    
+
         console.log(`clicked on channel ${channelName}`);
         getMessages(channelName)
         .then((messages) => {
+            console.log(messages);
             // an assertion that we got the right messages from the server
             if (messages.channel !== channelName) {
                 console.log("channel name bad request");
@@ -103,9 +110,9 @@ function createNewChannelElement(channelName) {
             messages["messages"].forEach((message) => {
                 const message_source = message.user === document.querySelector("#name").innerHTML ? "own" : "other";
                 const message_bubble = message_template({
-                    "source": message_source, // TODO
+                    "source": message_source, 
                     "sender": message.user,
-                    "timestamp": message["timestamp"], //TODO
+                    "timestamp": message["timestamp"], 
                     "message": message["text"]
                 });
                 message_wrapper.innerHTML += message_bubble;
@@ -114,7 +121,6 @@ function createNewChannelElement(channelName) {
         }); 
         return false; 
     }
-    link.innerHTML = "\xa0 # \xa0" + channelName;
     channel.appendChild(link);
     document.querySelector(".channels").appendChild(channel);
 }
