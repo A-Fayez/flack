@@ -101,10 +101,11 @@ function createNewChannelElement(channelName) {
             // display messages in their handlebars template
             const message_wrapper = document.querySelector(".inline-container");
             messages["messages"].forEach((message) => {
+                const message_source = message.user === document.querySelector("#name").innerHTML ? "own" : "other";
                 const message_bubble = message_template({
-                    "source": "own", // TODO
+                    "source": message_source, // TODO
                     "sender": message.user,
-                    "timestamp": "11:10 AM", //TODO
+                    "timestamp": message["timestamp"], //TODO
                     "message": message["text"]
                 });
                 message_wrapper.innerHTML += message_bubble;

@@ -18,6 +18,10 @@ messages_memory = {"general": [ {
                                     "user": "Jane Doe",
                                     "timestamp": "11:11 AM",
                                     "text": "Hi john"
+                                }, {
+                                     "user": "Fayez",
+                                    "timestamp": "11:13 AM",
+                                    "text": "Hi all"
                                 }
                             ]
                 } 
