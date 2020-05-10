@@ -1,8 +1,9 @@
 const message_template = Handlebars.compile(document.querySelector("#message").innerHTML);
 
+var messages = {};
+
 document.addEventListener('DOMContentLoaded', () => {
-    const test = message_template({'source': "own", "sender": "fayez", "message": "hi"});
-    console.log(test); 
+
     const displayName = document.querySelector("#name").innerHTML;
     localStorage.setItem('name', displayName);
 
@@ -19,6 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
             createNewChannelElement(channelName);
         });
     })
+
+    // load all messages
+    const request = new XMLHttpRequest();
+    request.open('GET', '/messages');
+    request.onload = () => {
+        messages = JSON.parse(request.responseText);
+    };
+    request.send();
 
     // socket commincation and controlling of sending/receiving messages
 
@@ -88,37 +97,19 @@ function createNewChannelElement(channelName, just_created = false) {
                 element.style.display = "flex";
             });
          }
-
-         // implies a newly created channel
-        // skip fetchin messages
-        if (just_created) {
-            return false;
-        }    
-
-        console.log(`clicked on channel ${channelName}`);
-        getMessages(channelName)
-        .then((messages) => {
-            console.log(messages);
-            // an assertion that we got the right messages from the server
-            if (messages.channel !== channelName) {
-                console.log("channel name bad request");
-                throw new Error("Something is wrong");
-            }
-
-            // display messages in their handlebars template
-            const message_wrapper = document.querySelector(".inline-container");
-            messages["messages"].forEach((message) => {
-                const message_source = message.user === document.querySelector("#name").innerHTML ? "own" : "other";
-                const message_bubble = message_template({
-                    "source": message_source, 
-                    "sender": message.user,
-                    "timestamp": message["timestamp"], 
-                    "message": message["text"]
-                });
-                message_wrapper.innerHTML += message_bubble;
-            });
-
-        }); 
+         // display messages in their handlebars template
+         const message_wrapper = document.querySelector(".inline-container");
+         message_wrapper.innerHTML = "";
+         messages[channelName].forEach((bubble) => {
+             const message_source = bubble.user === document.querySelector("#name").innerHTML ? "own" : "other";
+             const message_bubble = message_template({
+                 "source": message_source, 
+                 "sender": bubble.user,
+                 "timestamp": bubble["timestamp"], 
+                 "message": bubble["message"]
+             });
+             message_wrapper.innerHTML += message_bubble;
+         });
         return false; 
     }
     channel.appendChild(link);

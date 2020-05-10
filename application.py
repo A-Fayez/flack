@@ -13,15 +13,29 @@ channels_list = ["general", "bots", "random"]
 messages_memory = {"general": [ { 
                                   "user": "John Doe",
                                   "timestamp": "11:10 AM",
-                                  "text": "Hi jane"
+                                  "message": "Hi jane"
                                 }, {
                                     "user": "Jane Doe",
                                     "timestamp": "11:11 AM",
-                                    "text": "Hi john"
+                                    "message": "Hi john"
                                 }, {
                                      "user": "Fayez",
                                     "timestamp": "11:13 AM",
-                                    "text": "Hi all"
+                                    "message": "Hi all"
+                                }
+                            ],
+                    "random": [ { 
+                                  "user": "John ",
+                                  "timestamp": "2:10 AM",
+                                  "message": "Hi jane"
+                                }, {
+                                    "user": "Jane ",
+                                    "timestamp": "2:11 AM",
+                                    "message": "Hey"
+                                }, {
+                                     "user": "Sabrina",
+                                    "timestamp": "2:13 AM",
+                                    "message": "sup"
                                 }
                             ]
                 } 
@@ -83,17 +97,7 @@ def messages():
     specified in the url query param.
     """
 
-    channel_name = request.args.get("name")
-    print(channel_name)
-    if channel_name not in channels_list:
-        return jsonify({"status": "400", "message": "Bad request"}), 400
-
-    print(f"inside test view function with channel {channel_name}")
-    print(request.args)
-    return jsonify({
-        "channel": channel_name,
-        "messages": messages_memory.get(channel_name)
-    })
+    return jsonify(messages_memory)
     
 if __name__ == '__main__':
     socketio.run(app)
