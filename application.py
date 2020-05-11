@@ -66,6 +66,7 @@ def chat():
     return 405
 
 
+# TODO: make an empty list of bubbles to newly created messages
 @app.route("/channels", methods=["GET", "POST"])
 def channels():
     """An endpoint that returns a list of previously created channels
@@ -87,6 +88,8 @@ def channels():
             return jsonify({"valid": False}), 409
 
         channels_list.append(channel_name)
+        messages_memory[channel_name] = []
+
         return jsonify({"valid": True})
     
     return 405
@@ -98,6 +101,20 @@ def messages():
     """
 
     return jsonify(messages_memory)
-    
+
+
+@socketio.on("send message")
+def receive(bubble):
+    messages_memory[bubble["channel"]].append({
+        "user": bubble["user"],
+        "timestamp": bubble["timestamp"],
+        "message": bubble["message"]
+    })
+    import pprint
+    pprint.pprint(messages_memory)
+    emit("receive message", bubble, broadcast=True)
+
+
+
 if __name__ == '__main__':
     socketio.run(app)

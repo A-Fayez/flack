@@ -1,14 +1,16 @@
 const message_template = Handlebars.compile(document.querySelector("#message").innerHTML);
 
 var messages = {};
+var current_channel = "";
+var display_name = "";
+var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    const displayName = document.querySelector("#name").innerHTML;
-    localStorage.setItem('name', displayName);
+    display_name = document.querySelector("#name").innerHTML;
+    localStorage.setItem('name', display_name);
 
-    // used to execute displaying of messages box and new message are
-    // only once
+    // used to execute displaying of messages box and new message only once
     // TODO: might get in your way of implementing remembering the channel
     var anyLinkClicked = false; 
 
@@ -21,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     })
 
-    // load all messages
+    // load all messages to the global variable
     const request = new XMLHttpRequest();
     request.open('GET', '/messages');
     request.onload = () => {
@@ -29,7 +31,42 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     request.send();
 
+
     // socket commincation and controlling of sending/receiving messages
+    socket.on('connect', () => {
+        document.querySelector("button.send").onclick = () => {
+            const bubble = {
+                "channel": current_channel,
+                "user": display_name,
+                "timestamp": get_timestamp(),
+                "message": document.querySelector("#new-message-box").value
+            };
+
+            socket.emit('send message', bubble);
+        }; 
+    });
+
+    // When a new message is received, add to the messages object
+    socket.on('receive message', bubble => {
+        const channel = bubble["channel"];
+        messages[channel].push({
+            user: bubble["user"],
+            timestamp: bubble["timestamp"],
+            message: bubble["message"]}
+        );
+        // now display the new message bubble
+        const message_wrapper = document.querySelector(".inline-container");
+        const message_source = bubble["user"] === document.querySelector("#name").innerHTML ? "own" : "other";
+        const message_bubble = message_template({
+            "source": message_source, 
+            "sender": bubble["user"],
+            "timestamp": bubble["timestamp"], 
+            "message": bubble["message"]
+        });
+        message_wrapper.innerHTML += message_bubble;
+
+        console.log(messages)
+    });
 
 
     // control displaying of popup
@@ -88,8 +125,11 @@ function createNewChannelElement(channelName, just_created = false) {
     link.innerHTML = "\xa0 # \xa0" + channelName;
     link.href = "";
     link.className = "ch-link";
-    link.onclick = function() {   
+    link.onclick = function() {  
+        
+        current_channel = channelName;
         keepActive(this); 
+
         // show new message box 
         if (!window.anyLinkClicked) {
             anyLinkClicked = true;
@@ -100,6 +140,11 @@ function createNewChannelElement(channelName, just_created = false) {
          // display messages in their handlebars template
          const message_wrapper = document.querySelector(".inline-container");
          message_wrapper.innerHTML = "";
+
+         if (!messages[channelName]){
+             return false;
+         }
+         
          messages[channelName].forEach((bubble) => {
              const message_source = bubble.user === document.querySelector("#name").innerHTML ? "own" : "other";
              const message_bubble = message_template({
@@ -110,6 +155,7 @@ function createNewChannelElement(channelName, just_created = false) {
              });
              message_wrapper.innerHTML += message_bubble;
          });
+
         return false; 
     }
     channel.appendChild(link);
@@ -142,5 +188,10 @@ async function getMessages(channelName) {
     url.searchParams.append("name", channelName);
     const response = await fetch(url);
     return response.json();
+}
+
+function get_timestamp() {
+    const time = new Date();
+    return time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
 }
 
