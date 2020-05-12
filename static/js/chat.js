@@ -6,6 +6,7 @@ var display_name = "";
 var channels = [];
 var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
+
 document.addEventListener('DOMContentLoaded', () => {
 
     display_name = document.querySelector("#name").innerHTML;
@@ -30,9 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
             channels.push(channel_name);
             createNewChannelElement(channel_name);
         });
-    })
 
-    // load all messages to the global variable
+    });
+
+     // load all messages to the global variable
     const request = new XMLHttpRequest();
     request.open('GET', '/messages');
     request.onload = () => {
@@ -40,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     request.send();
 
-
+ 
     // socket commincation and controlling of sending/receiving messages
     socket.on('connect', () => {
         document.querySelector("button.send").onclick = () => {
@@ -123,24 +125,27 @@ document.addEventListener('DOMContentLoaded', () => {
         popup.style.display = "none";
     };
 
-    // creating new channel
-    // document.querySelector("#create").onclick = () => {
-    //     const channelName = document.querySelector("#new-channel-name").value;
-    //     postRequest("/channels", {"chName": channelName})
-    //     .then(response => {
-    //         if (response.valid) {
-    //             createNewChannelElement(channelName, true);
-    //             popup.style.display = "none";
-    //             console.log("channel created");
-    //         }
-    //         else if (!response.valid) {
-    //             duplicateChannelName();
-    //         }
-    //     })
-    //     .catch(e => console.log(e));
-    // };
-
 });
+
+
+// remember the channel when the user leave the website
+window.onbeforeunload = () => {
+    localStorage.setItem("last_channel", current_channel);
+};
+
+
+window.onload =  function remember() {
+    // remember the channel when the user leave the website and comes back
+    setTimeout(() => {
+        if (localStorage.getItem("last_channel")) {
+            const channel_id = localStorage.getItem("last_channel");
+            document.querySelector(`#${channel_id}`).click();
+            console.log(`I remembered #${channel_id}`);
+        }
+    }, 100);
+
+};
+
 
 // Helper functions
 
@@ -168,6 +173,7 @@ function createNewChannelElement(channelName, just_created = false) {
     link.innerHTML = "\xa0 # \xa0" + channelName;
     link.href = "";
     link.className = "ch-link";
+    link.id = channelName;
     link.onclick = function() {  
 
         current_channel = channelName;
