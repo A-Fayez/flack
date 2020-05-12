@@ -5,8 +5,14 @@
 {% block body %}
 
 {% raw -%}
-<script id="message" type="text/x-handlebars-template">
-    <div class="msg-bubble {{source}}"><span class="sender">{{sender}}</span><span class="timestamp">{{timestamp}}</span><br>{{message}}</div> 
+<script id="messages-box" type="text/x-handlebars-template">  
+    <!-- Message bubble template-->    
+    <div class="msg-bubble {{ source }}">
+        <span class="sender">{{ sender }}</span>
+        <span class="timestamp">{{ timestamp }}</span>
+        <br>
+        {{message}}
+    </div> 
 </script>
 {%- endraw %}
 
@@ -38,15 +44,19 @@
     </div>
 </div>
 
-<div class="messages">
-    <div id="chat-box">
-        <div class="bubble-wrapper">
-            <div class="inline-container">
-                <!-- Message bubble template-->    
+
+{% raw -%}
+    <div class="messages">
+        <div id="chat-box">
+            <div class="bubble-wrapper">
+                <div class="inline-container">
+                    // message template here    
+                </div>
             </div>
         </div>
     </div>
-</div>
+{%- endraw %}
+
 
 <div class="popup">
     <div class="popup-content">

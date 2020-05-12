@@ -1,13 +1,13 @@
 import os
 
-from flask import Flask,render_template, request, jsonify
+from flask import Flask,render_template, request, jsonify, redirect, url_for
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
-users = ["John Doe", "Jane Doe"]
+users = ["John Doe", "Jane Doe", "Meligy", "Fayez"]
 channels_list = ["general", "bots", "random"]
 # K: <string(chName)>, V: stack of messages (list) each element in list is dict with K:user V: msg
 messages_memory = {"general": [ { 
@@ -50,6 +50,9 @@ def chat():
 
     if request.method == "GET":
         name = request.args.get("name")
+        if name.lower() not in list(map(lambda x:x.lower(), users)):
+            return render_template("index.html")
+
         return render_template("chat.html", display_name=name)
 
     # authenticate
@@ -105,14 +108,35 @@ def messages():
 
 @socketio.on("send message")
 def receive(bubble):
+
     messages_memory[bubble["channel"]].append({
         "user": bubble["user"],
         "timestamp": bubble["timestamp"],
         "message": bubble["message"]
     })
-    import pprint
-    pprint.pprint(messages_memory)
+
+    # only store up to 100 messages
+    if len(messages_memory[bubble["channel"]]) > 100:
+        del messages_memory[bubble["channel"]][0]
+
+    # import pprint
+    # pprint.pprint(messages_memory)
+    # pprint.pprint(bubble)
+
     emit("receive message", bubble, broadcast=True)
+
+
+@socketio.on("channel created")
+def channel(channel):
+    print(channel)
+
+    if channel["name"] in channels_list:
+        emit("channel validation", {"valid": False})
+    
+    channels_list.append(channel["name"])
+    messages_memory[channel["name"]] = []
+
+    emit("channel validation", {"valid": True, "name": channel["name"]}, broadcast=True)
 
 
 

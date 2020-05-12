@@ -1,14 +1,22 @@
-const message_template = Handlebars.compile(document.querySelector("#message").innerHTML);
+const message_template = Handlebars.compile(document.querySelector("#messages-box").innerHTML);
 
 var messages = {};
 var current_channel = "";
 var display_name = "";
+var channels = [];
 var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
 document.addEventListener('DOMContentLoaded', () => {
 
     display_name = document.querySelector("#name").innerHTML;
     localStorage.setItem('name', display_name);
+
+    document.querySelector("textarea").addEventListener("keydown", e => {
+        if (e.keyCode === 13) {
+            document.querySelector("button.send").click();
+        }
+    })
+
 
     // used to execute displaying of messages box and new message only once
     // TODO: might get in your way of implementing remembering the channel
@@ -18,8 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch("/channels")
     .then(response => response.json())
     .then((channelsJSON) => {
-        channelsJSON['channels'].forEach((channelName) => {
-            createNewChannelElement(channelName);
+        channelsJSON['channels'].forEach((channel_name) => {
+            channels.push(channel_name);
+            createNewChannelElement(channel_name);
         });
     })
 
@@ -35,19 +44,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // socket commincation and controlling of sending/receiving messages
     socket.on('connect', () => {
         document.querySelector("button.send").onclick = () => {
+            const textbox = document.querySelector("#new-message-box");
+
+            // prevent empty messages
+            if (textbox.value.trim() === "") {
+                return false
+            }
+
             const bubble = {
                 "channel": current_channel,
                 "user": display_name,
                 "timestamp": get_timestamp(),
-                "message": document.querySelector("#new-message-box").value
+                "message": textbox.value
             };
-
             socket.emit('send message', bubble);
+
+            textbox.value = "";
         }; 
+          // creating new channel
+          document.querySelector("#create").onclick = () => {
+            const channel_name = document.querySelector("#new-channel-name").value;
+
+            if (channels.includes(channel_name)) {
+                duplicateChannelName();
+                return false;
+            }
+
+            socket.emit('channel created', {"name": channel_name});        
+        };
     });
 
     // When a new message is received, add to the messages object
     socket.on('receive message', bubble => {
+
         const channel = bubble["channel"];
         messages[channel].push({
             user: bubble["user"],
@@ -55,6 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
             message: bubble["message"]}
         );
         // now display the new message bubble
+        
+        if (bubble.channel === current_channel) {
         const message_wrapper = document.querySelector(".inline-container");
         const message_source = bubble["user"] === document.querySelector("#name").innerHTML ? "own" : "other";
         const message_bubble = message_template({
@@ -64,8 +95,20 @@ document.addEventListener('DOMContentLoaded', () => {
             "message": bubble["message"]
         });
         message_wrapper.innerHTML += message_bubble;
+        updateScroll();
+    }
+        console.log(bubble.channel)
+    });
 
-        console.log(messages)
+    socket.on('channel validation', channel => {
+        console.log(channel);
+        if (channel.valid) {
+            channels.push(channel.name);
+            createNewChannelElement(channel.name, true);
+            messages[channel.name] = [];           
+            popup.style.display = "none";
+            console.log("channel created");
+        }
     });
 
 
@@ -81,21 +124,21 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // creating new channel
-    document.querySelector("#create").onclick = () => {
-        const channelName = document.querySelector("#new-channel-name").value;
-        postRequest("/channels", {"chName": channelName})
-        .then(response => {
-            if (response.valid) {
-                createNewChannelElement(channelName, true);
-                popup.style.display = "none";
-                console.log("channel created");
-            }
-            else if (!response.valid) {
-                duplicateChannelName();
-            }
-        })
-        .catch(e => console.log(e));
-    };
+    // document.querySelector("#create").onclick = () => {
+    //     const channelName = document.querySelector("#new-channel-name").value;
+    //     postRequest("/channels", {"chName": channelName})
+    //     .then(response => {
+    //         if (response.valid) {
+    //             createNewChannelElement(channelName, true);
+    //             popup.style.display = "none";
+    //             console.log("channel created");
+    //         }
+    //         else if (!response.valid) {
+    //             duplicateChannelName();
+    //         }
+    //     })
+    //     .catch(e => console.log(e));
+    // };
 
 });
 
@@ -126,7 +169,7 @@ function createNewChannelElement(channelName, just_created = false) {
     link.href = "";
     link.className = "ch-link";
     link.onclick = function() {  
-        
+
         current_channel = channelName;
         keepActive(this); 
 
@@ -145,6 +188,7 @@ function createNewChannelElement(channelName, just_created = false) {
              return false;
          }
          
+         // display messages from the global object messages 
          messages[channelName].forEach((bubble) => {
              const message_source = bubble.user === document.querySelector("#name").innerHTML ? "own" : "other";
              const message_bubble = message_template({
@@ -154,8 +198,10 @@ function createNewChannelElement(channelName, just_created = false) {
                  "message": bubble["message"]
              });
              message_wrapper.innerHTML += message_bubble;
+             
          });
 
+        updateScroll();
         return false; 
     }
     channel.appendChild(link);
@@ -193,5 +239,12 @@ async function getMessages(channelName) {
 function get_timestamp() {
     const time = new Date();
     return time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+}
+
+function updateScroll(){
+    const chat_box = document.querySelector("#chat-box");
+    if (chat_box.scrollHeight - chat_box.clientHeight > 0) {
+        chat_box.scrollTop = chat_box.scrollHeight;
+    }
 }
 
