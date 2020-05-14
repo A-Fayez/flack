@@ -29,20 +29,21 @@ document.addEventListener('DOMContentLoaded', () => {
             channels.push(channel_name);
             createNewChannelElement(channel_name);
         });
-
     });
 
      // load all messages to the global variable
     const request = new XMLHttpRequest();
     request.open('GET', '/messages');
-    request.onload = () => {
-        messages = JSON.parse(request.responseText);
-    };
     request.send();
-
- 
+    request.onload = () => {
+        messages = JSON.parse(request.responseText);    
+    };
+    
+    
     // socket commincation and controlling of sending/receiving messages
+    
     socket.on('connect', () => {
+        // sending a new message
         document.querySelector("button.send").onclick = () => {
             const textbox = document.querySelector("#new-message-box");
 
@@ -57,10 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 "timestamp": get_timestamp(),
                 "message": textbox.value
             };
+
             socket.emit('send message', bubble);
 
             textbox.value = "";
         }; 
+
           // creating new channel
           document.querySelector("#create").onclick = () => {
             const channel_name = document.querySelector("#new-channel-name").value;
@@ -72,6 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             socket.emit('channel created', {"name": channel_name});        
         };
+
+         
     });
 
     // When a new message is received, add to the messages object

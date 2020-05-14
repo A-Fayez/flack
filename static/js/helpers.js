@@ -54,9 +54,12 @@ function createNewChannelElement(channelName, just_created = false) {
                  "timestamp": bubble["timestamp"], 
                  "message": bubble["message"]
              });
+
              message_wrapper.innerHTML += message_bubble;
              
          });
+
+        document.querySelector("#new-message-box").placeholder = `Message # ${channelName}`;
 
         updateScroll();
         return false; 

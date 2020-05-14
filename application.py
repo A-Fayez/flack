@@ -9,6 +9,7 @@ socketio = SocketIO(app)
 
 users = ["John Doe", "Jane Doe", "Meligy", "Fayez"]
 channels_list = ["general", "bots", "random"]
+
 # K: <string(chName)>, V: stack of messages (list) each element in list is dict with K:user V: msg
 messages_memory = {"general": [ { 
                                   "user": "John Doe",
@@ -56,7 +57,7 @@ def chat():
         return render_template("chat.html", display_name=name)
 
     # authenticate
-    # we want no display name conflicts and at the same time we want to display
+    # we want no display-name conflicts and at the same time we want to display
     # them as typed, hence using the map function 
     elif request.method == "POST":
         name = request.form.get("name")
@@ -99,10 +100,8 @@ def channels():
 
 @app.route("/messages", methods=["GET"])
 def messages():
-    """returns a json representation of previously sent messages in the channel name
-    specified in the url query param.
+    """returns a json representation of previously sent messages
     """
-
     return jsonify(messages_memory)
 
 
@@ -138,6 +137,10 @@ def channel(channel):
 
     emit("channel validation", {"valid": True, "name": channel["name"]}, broadcast=True)
 
+
+@socketio.on("delete msg")
+def delete(data):
+    print("received delete event")
 
 
 if __name__ == '__main__':
