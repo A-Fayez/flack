@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelector("textarea").addEventListener("keydown", e => {
         if (e.keyCode === 13) {
+            e.preventDefault();
             document.querySelector("button.send").click();
         }
     })
@@ -75,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             socket.emit('channel created', {"name": channel_name});        
         };
-
          
     });
 
@@ -99,8 +99,24 @@ document.addEventListener('DOMContentLoaded', () => {
             "timestamp": bubble["timestamp"], 
             "message": bubble["message"]
         });
+        console.log(typeof message_wrapper)
+
         message_wrapper.innerHTML += message_bubble;
+
         updateScroll();
+
+        // configure delete btn
+        const del_btn = message_wrapper.lastChild.previousSibling.querySelector(".msg-bubble.own .delete");
+        del_btn.href = "";
+        del_btn.onclick = function() {
+            if (confirm("Are you sure you want to delete your message?")) {
+                socket.emit("delete message", {"test": "test"});
+                console.log("delete new message");
+                this.parentNode.remove();
+            }
+            return false;
+        }
+
     }
         console.log(bubble.channel)
     });

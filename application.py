@@ -138,7 +138,7 @@ def channel(channel):
     emit("channel validation", {"valid": True, "name": channel["name"]}, broadcast=True)
 
 
-@socketio.on("delete msg")
+@socketio.on("delete message")
 def delete(data):
     print("received delete event")
 

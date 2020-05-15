@@ -54,8 +54,20 @@ function createNewChannelElement(channelName, just_created = false) {
                  "timestamp": bubble["timestamp"], 
                  "message": bubble["message"]
              });
-
              message_wrapper.innerHTML += message_bubble;
+
+             // configure delete button
+             document.querySelectorAll(".msg-bubble.own .delete").forEach(link => {
+                 link.href = "";
+                 link.onclick = function() {
+                    if (confirm("Are you sure you want to delete your message?")) {
+                        socket.emit("delete message", {"test": "test"});
+                        console.log("clicked on msg");
+                        this.parentNode.remove();
+                    }
+                     return false;
+                 }
+             })
              
          });
 
