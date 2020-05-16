@@ -3,6 +3,8 @@ import os
 from flask import Flask,render_template, request, jsonify, redirect, url_for
 from flask_socketio import SocketIO, emit
 
+from uuid import uuid1
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
@@ -14,29 +16,35 @@ channels_list = ["general", "bots", "random"]
 messages_memory = {"general": [ { 
                                   "user": "John Doe",
                                   "timestamp": "11:10 AM",
-                                  "message": "Hi jane"
+                                  "message": "Hi jane",
+                                  "id": "1"
                                 }, {
                                     "user": "Jane Doe",
                                     "timestamp": "11:11 AM",
-                                    "message": "Hi john"
+                                    "message": "Hi john",
+                                    "id": "2"
                                 }, {
                                      "user": "Fayez",
                                     "timestamp": "11:13 AM",
-                                    "message": "Hi all"
+                                    "message": "Hi all",
+                                    "id": "3"
                                 }
                             ],
                     "random": [ { 
                                   "user": "John ",
                                   "timestamp": "2:10 AM",
-                                  "message": "Hi jane"
+                                  "message": "Hi jane",
+                                  "id": "4"
                                 }, {
                                     "user": "Jane ",
                                     "timestamp": "2:11 AM",
-                                    "message": "Hey"
+                                    "message": "Hey",
+                                    "id": "5"
                                 }, {
                                      "user": "Sabrina",
                                     "timestamp": "2:13 AM",
-                                    "message": "sup"
+                                    "message": "sup",
+                                    "id": "6"
                                 }
                             ]
                 } 
@@ -108,11 +116,20 @@ def messages():
 @socketio.on("send message")
 def receive(bubble):
 
+    message_id = str(uuid1())
+
     messages_memory[bubble["channel"]].append({
         "user": bubble["user"],
         "timestamp": bubble["timestamp"],
-        "message": bubble["message"]
+        "message": bubble["message"],
+        "id": message_id
     })
+
+    bubble["id"] = message_id
+
+    print(type(bubble))
+    
+    print(bubble)
 
     # only store up to 100 messages
     if len(messages_memory[bubble["channel"]]) > 100:
@@ -139,8 +156,24 @@ def channel(channel):
 
 
 @socketio.on("delete message")
-def delete(data):
-    print("received delete event")
+def delete(bubble):
+
+    print(f"received delete event {bubble['channel']}")
+
+    channel = bubble["channel"]
+    message_index = find_message_index(channel, bubble["id"])
+    del messages_memory.get(channel)[message_index]
+
+
+    emit("confirm delete", bubble, broadcast=True)
+    
+
+
+def find_message_index(channel, id):
+    for i, dic in enumerate(messages_memory[channel]):
+        if dic["id"] == id:
+            return i
+    return -1
 
 
 if __name__ == '__main__':

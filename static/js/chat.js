@@ -86,8 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
         messages[channel].push({
             user: bubble["user"],
             timestamp: bubble["timestamp"],
-            message: bubble["message"]}
-        );
+            message: bubble["message"],
+            id: bubble["id"]
+        });
+        
+        console.log(bubble);
+
         // now display the new message bubble
         
         if (bubble.channel === current_channel) {
@@ -97,8 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
             "source": message_source, 
             "sender": bubble["user"],
             "timestamp": bubble["timestamp"], 
-            "message": bubble["message"]
+            "message": bubble["message"],
+            "id": bubble["id"]
         });
+
         console.log(typeof message_wrapper)
 
         message_wrapper.innerHTML += message_bubble;
@@ -106,13 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
         updateScroll();
 
         // configure delete btn
-        const del_btn = message_wrapper.lastChild.previousSibling.querySelector(".msg-bubble.own .delete");
+        const del_btn = message_wrapper.querySelector(`#${CSS.escape(bubble["id"])} .delete`);
         del_btn.href = "";
         del_btn.onclick = function() {
             if (confirm("Are you sure you want to delete your message?")) {
-                socket.emit("delete message", {"test": "test"});
+                socket.emit("delete message", bubble);
                 console.log("delete new message");
-                this.parentNode.remove();
+                //this.parentNode.remove();
             }
             return false;
         }
@@ -130,6 +136,12 @@ document.addEventListener('DOMContentLoaded', () => {
             popup.style.display = "none";
             console.log("channel created");
         }
+    });
+
+
+    socket.on('confirm delete', bubble => {
+        console.log("received broadcast deletion")
+        remove_message(bubble["channel"], bubble["id"]);
     });
 
 
