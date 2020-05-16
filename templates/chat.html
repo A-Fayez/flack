@@ -7,11 +7,12 @@
 {% raw -%}
 <script id="messages-box" type="text/x-handlebars-template">  
     <!-- Message bubble template-->    
-    <div class="msg-bubble {{ source }}">
+    <div class="msg-bubble {{ source }}" id = "{{ id }}">
         <span class="sender">{{ sender }}</span>
         <span class="timestamp">{{ timestamp }}</span>
         <br>
         {{message}}
+        <a class="delete">x</a>
     </div> 
 </script>
 {%- endraw %}
@@ -48,7 +49,7 @@
         <div id="chat-box">
             <div class="bubble-wrapper">
                 <div class="inline-container">
-                    // message template here    
+                    <!--  message template here     -->
                 </div>
             </div>
         </div>

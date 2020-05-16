@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelector("textarea").addEventListener("keydown", e => {
         if (e.keyCode === 13) {
+            e.preventDefault();
             document.querySelector("button.send").click();
         }
     })
@@ -29,20 +30,21 @@ document.addEventListener('DOMContentLoaded', () => {
             channels.push(channel_name);
             createNewChannelElement(channel_name);
         });
-
     });
 
      // load all messages to the global variable
     const request = new XMLHttpRequest();
     request.open('GET', '/messages');
-    request.onload = () => {
-        messages = JSON.parse(request.responseText);
-    };
     request.send();
-
- 
+    request.onload = () => {
+        messages = JSON.parse(request.responseText);    
+    };
+    
+    
     // socket commincation and controlling of sending/receiving messages
+    
     socket.on('connect', () => {
+        // sending a new message
         document.querySelector("button.send").onclick = () => {
             const textbox = document.querySelector("#new-message-box");
 
@@ -57,10 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 "timestamp": get_timestamp(),
                 "message": textbox.value
             };
+
             socket.emit('send message', bubble);
 
             textbox.value = "";
         }; 
+
           // creating new channel
           document.querySelector("#create").onclick = () => {
             const channel_name = document.querySelector("#new-channel-name").value;
@@ -72,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             socket.emit('channel created', {"name": channel_name});        
         };
+         
     });
 
     // When a new message is received, add to the messages object
@@ -81,8 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
         messages[channel].push({
             user: bubble["user"],
             timestamp: bubble["timestamp"],
-            message: bubble["message"]}
-        );
+            message: bubble["message"],
+            id: bubble["id"]
+        });
+        
+        console.log(bubble);
+
         // now display the new message bubble
         
         if (bubble.channel === current_channel) {
@@ -92,10 +101,28 @@ document.addEventListener('DOMContentLoaded', () => {
             "source": message_source, 
             "sender": bubble["user"],
             "timestamp": bubble["timestamp"], 
-            "message": bubble["message"]
+            "message": bubble["message"],
+            "id": bubble["id"]
         });
+
+        console.log(typeof message_wrapper)
+
         message_wrapper.innerHTML += message_bubble;
+
         updateScroll();
+
+        // configure delete btn
+        const del_btn = message_wrapper.querySelector(`#${CSS.escape(bubble["id"])} .delete`);
+        del_btn.href = "";
+        del_btn.onclick = function() {
+            if (confirm("Are you sure you want to delete your message?")) {
+                socket.emit("delete message", bubble);
+                console.log("delete new message");
+                //this.parentNode.remove();
+            }
+            return false;
+        }
+
     }
         console.log(bubble.channel)
     });
@@ -109,6 +136,12 @@ document.addEventListener('DOMContentLoaded', () => {
             popup.style.display = "none";
             console.log("channel created");
         }
+    });
+
+
+    socket.on('confirm delete', bubble => {
+        console.log("received broadcast deletion")
+        remove_message(bubble["channel"], bubble["id"]);
     });
 
 

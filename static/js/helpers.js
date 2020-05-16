@@ -52,11 +52,28 @@ function createNewChannelElement(channelName, just_created = false) {
                  "source": message_source, 
                  "sender": bubble.user,
                  "timestamp": bubble["timestamp"], 
-                 "message": bubble["message"]
+                 "message": bubble["message"],
+                 "id": bubble["id"]
              });
              message_wrapper.innerHTML += message_bubble;
+
+             // configure delete button
+             document.querySelectorAll(".msg-bubble.own .delete").forEach(link => {
+                 link.href = "";
+                 link.onclick = function() {
+                    if (confirm("Are you sure you want to delete your message?")) {
+                        bubble["channel"] = channelName; // not sure
+                        socket.emit("delete message", bubble);
+                        console.log("clicked on msg");
+                        //this.parentNode.remove();
+                    }
+                     return false;
+                 }
+             })
              
          });
+
+        document.querySelector("#new-message-box").placeholder = `Message # ${channelName}`;
 
         updateScroll();
         return false; 
@@ -102,5 +119,20 @@ function updateScroll(){
     const chat_box = document.querySelector("#chat-box");
     if (chat_box.scrollHeight - chat_box.clientHeight > 0) {
         chat_box.scrollTop = chat_box.scrollHeight;
+    }
+}
+
+// delete a message from the global object and remove the bubble node
+ function remove_message(channel, id) {
+    const index = messages[channel].findIndex((bubble)=> {
+        if (id === bubble["id"]) {
+            return true;
+        }
+        return false;
+    });
+    messages[channel].splice(index, 1);
+
+    if (channel === current_channel) {
+        document.getElementById(id).remove();
     }
 }
