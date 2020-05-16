@@ -46,7 +46,8 @@ messages_memory = {"general": [ {
                                     "message": "sup",
                                     "id": "6"
                                 }
-                            ]
+                            ],
+                        "bots": []
                 } 
 
 

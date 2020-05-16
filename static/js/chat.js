@@ -151,6 +151,14 @@ document.addEventListener('DOMContentLoaded', () => {
         popup.style.display = "flex";
         document.querySelector(".popup input").value = "";
         document.querySelector(".popup input").focus();
+
+        document.querySelector(".popup input").addEventListener("keydown", e => {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                document.querySelector("#create").click();
+            }
+        });
+
     };
     document.querySelector("#cancel").onclick = () => {
         popup.style.display = "none";

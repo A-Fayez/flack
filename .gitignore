@@ -1,6 +1,5 @@
 static/node_modules/*
-static/css/chat.css
-static/css/style.css
+static/sass/*
 instance/*
 !instance/.gitignore
 .webassets-cache
@@ -16,3 +15,4 @@ flask_session/*
 .vscode/*
 !.vscode/settings.json
 
+*.gif
