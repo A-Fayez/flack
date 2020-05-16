@@ -1,4 +1,4 @@
-![](demo.gif)
+![](static/demo.gif)
 
 
 

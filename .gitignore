@@ -14,5 +14,3 @@ flask_session/*
 # vscode
 .vscode/*
 !.vscode/settings.json
-
-*.gif
