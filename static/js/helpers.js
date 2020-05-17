@@ -4,6 +4,10 @@
 // that conflicts with a created channel
 function duplicateChannelName() {
     // position: relative; margin: 0 auto; color: red; top:1100%;
+    if (document.querySelector(".popup-content label") !== null) {
+        document.querySelector(".popup-content label").remove();
+    }
+
     const label = document.createElement("label");
     label.innerHTML = "A channel with the same name already  exists.";
     label.style.color = "red";
@@ -62,10 +66,9 @@ function createNewChannelElement(channelName, just_created = false) {
                  link.href = "";
                  link.onclick = function() {
                     if (confirm("Are you sure you want to delete your message?")) {
-                        bubble["channel"] = channelName; // not sure
+                        bubble["channel"] = channelName; 
                         socket.emit("delete message", bubble);
                         console.log("clicked on msg");
-                        //this.parentNode.remove();
                     }
                      return false;
                  }
@@ -73,7 +76,7 @@ function createNewChannelElement(channelName, just_created = false) {
              
          });
 
-        document.querySelector("#new-message-box").placeholder = `Message # ${channelName}`;
+        document.querySelector("#new-message-box").placeholder = `Message #${channelName}`;
 
         updateScroll();
         return false; 
@@ -115,6 +118,7 @@ function get_timestamp() {
     return time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
 }
 
+// Makes the chat-box always scrolled at the newest messages
 function updateScroll(){
     const chat_box = document.querySelector("#chat-box");
     if (chat_box.scrollHeight - chat_box.clientHeight > 0) {
@@ -122,7 +126,7 @@ function updateScroll(){
     }
 }
 
-// delete a message from the global object and remove the bubble node
+// delete a message from the global object and remove the bubble node from the DOM
  function remove_message(channel, id) {
     const index = messages[channel].findIndex((bubble)=> {
         if (id === bubble["id"]) {

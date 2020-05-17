@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
 
-    // used to execute displaying of messages box and new message only once
+    // used to make dispaying of necessary ui only once
+    // doesn't have to execute code more than once when channels keeps clicked on
     var anyLinkClicked = false; 
 
     // list previously created channels 
@@ -92,8 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         console.log(bubble);
 
-        // now display the new message bubble
-        
+        // now display the new message bubble    
         if (bubble.channel === current_channel) {
         const message_wrapper = document.querySelector(".inline-container");
         const message_source = bubble["user"] === document.querySelector("#name").innerHTML ? "own" : "other";
@@ -105,20 +105,16 @@ document.addEventListener('DOMContentLoaded', () => {
             "id": bubble["id"]
         });
 
-        console.log(typeof message_wrapper)
-
         message_wrapper.innerHTML += message_bubble;
 
         updateScroll();
 
-        // configure delete btn
+        // configure delete message button
         const del_btn = message_wrapper.querySelector(`#${CSS.escape(bubble["id"])} .delete`);
         del_btn.href = "";
         del_btn.onclick = function() {
             if (confirm("Are you sure you want to delete your message?")) {
                 socket.emit("delete message", bubble);
-                console.log("delete new message");
-                //this.parentNode.remove();
             }
             return false;
         }
@@ -145,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // control displaying of popup
+    // control displaying of create-new-channel popup
     const popup = document.querySelector(".popup");
     document.querySelector("#new-channel-btn").onclick = () => {
         popup.style.display = "flex";

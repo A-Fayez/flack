@@ -25,13 +25,14 @@ Users are able to sign in flack with a display name, create channels (i.e. chatr
 
 
 # Personal Touch
-Users are able to delete their own message in real-time.
+Users are able to delete their own messages in real-time.
 
-# installation
+# Installation
 
 Requires `Python>3.6`
 
 ```bash
+git clone https://github.com/A-Fayez/flack.git && cd flack
 pip3 install -r requirements.txt
 python3 application.py
 ```
