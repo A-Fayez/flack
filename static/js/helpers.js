@@ -31,8 +31,9 @@ function createNewChannelElement(channelName, just_created = false) {
   link.id = channelName;
   link.onclick = function () {
     current_channel = channelName;
-    keepActive(this);
+    localStorage.setItem("last_channel", current_channel);
 
+    keepActive(this);
     // show new message box
     if (!window.anyLinkClicked) {
       anyLinkClicked = true;
