@@ -39,3 +39,7 @@ python3 application.py
 
 Now the server is run locally, navigate to [http://localhost:5000](http://localhost:5000).
 
+
+# Further Improvements
+* using `webpack` or any bundler instead of using a CDN.
+* private chat rooms between users

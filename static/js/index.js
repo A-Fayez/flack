@@ -1,6 +1,8 @@
-const displayName = localStorage.getItem('name');
-if (displayName) {
-    window.location = "/chat?name=" + displayName;
+const display_name = localStorage.getItem('name');
+
+
+if (display_name ) {
+    window.location = "/chat?name=" + display_name;
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -95,14 +95,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // now display the new message bubble    
         if (bubble.channel === current_channel) {
-        const message_wrapper = document.querySelector(".inline-container");
-        const message_source = bubble["user"] === document.querySelector("#name").innerHTML ? "own" : "other";
-        const message_bubble = message_template({
-            "source": message_source, 
-            "sender": bubble["user"],
-            "timestamp": bubble["timestamp"], 
-            "message": bubble["message"],
-            "id": bubble["id"]
+            const message_wrapper = document.querySelector(".inline-container");
+            const message_source = bubble["user"] === document.querySelector("#name").innerHTML ? "own" : "other";
+            const message_bubble = message_template({
+                "source": message_source, 
+                "sender": bubble["user"],
+                "timestamp": bubble["timestamp"], 
+                "message": bubble["message"],
+                "id": bubble["id"]
         });
 
         message_wrapper.innerHTML += message_bubble;
@@ -112,12 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // configure delete message button
         const del_btn = message_wrapper.querySelector(`#${CSS.escape(bubble["id"])} .delete`);
         del_btn.href = "";
-        del_btn.onclick = function() {
+        del_btn.addEventListener('click', e => {
+            e.preventDefault();
             if (confirm("Are you sure you want to delete your message?")) {
                 socket.emit("delete message", bubble);
             }
             return false;
-        }
+        });
 
     }
         console.log(bubble.channel)

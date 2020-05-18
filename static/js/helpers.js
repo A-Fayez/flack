@@ -25,7 +25,7 @@ function duplicateChannelName() {
 function createNewChannelElement(channelName, just_created = false) {
     const channel = document.createElement("li");
     const link = document.createElement("a");
-    link.innerHTML = "\xa0 # \xa0" + channelName;
+    link.innerHTML = `\xa0 # \xa0  ${channelName}`;
     link.href = "";
     link.className = "ch-link";
     link.id = channelName;
@@ -129,10 +129,7 @@ function updateScroll(){
 // delete a message from the global object and remove the bubble node from the DOM
  function remove_message(channel, id) {
     const index = messages[channel].findIndex((bubble)=> {
-        if (id === bubble["id"]) {
-            return true;
-        }
-        return false;
+        return id === bubble["id"];
     });
     messages[channel].splice(index, 1);
 

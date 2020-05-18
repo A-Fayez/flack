@@ -4,7 +4,11 @@
 {% endblock %}
 
 {% block body %}
-<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+{% if try_to_remember == "True" %}
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endif %}
+
 <h1>Welcome to Flack</h1>
 <div class="display"> 
     <form action="{{ url_for('chat') }}" method="POST">

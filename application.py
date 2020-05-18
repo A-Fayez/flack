@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask,render_template, request, jsonify, redirect, url_for
+from flask import Flask,render_template, request, jsonify
 from flask_socketio import SocketIO, emit
 
 from uuid import uuid1
@@ -53,15 +53,20 @@ messages_memory = {"general": [ {
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", try_to_remember="True")
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
 
     if request.method == "GET":
+
         name = request.args.get("name")
+        print(name)
+        if name is None:
+            return render_template("index.html", try_to_remember="True")
+
         if name.lower() not in list(map(lambda x:x.lower(), users)):
-            return render_template("index.html")
+            return render_template("index.html", try_to_remember="False")
 
         return render_template("chat.html", display_name=name)
 
@@ -71,7 +76,7 @@ def chat():
     elif request.method == "POST":
         name = request.form.get("name")
         if name.lower() in list(map(lambda x:x.lower(), users)): # display name conflicts
-            return render_template("index.html", auth="False")
+            return render_template("index.html", auth="False", try_to_remember="False")
         users.append(name)
         print(users)
         return render_template("chat.html", display_name=name)
@@ -79,7 +84,15 @@ def chat():
     return 405
 
 
-# TODO: make an empty list of bubbles to newly created messages
+@app.route("/auth")
+def auth(display_name):
+
+    if name.lower() in list(map(lambda x:x.lower(), users)):
+        return jsonify({"displayName": display_name, "exists": True})
+
+    return jsonify({"displayName": display_name, "exists": False})
+
+
 @app.route("/channels", methods=["GET", "POST"])
 def channels():
     """An endpoint that returns a list of previously created channels
@@ -175,6 +188,9 @@ def find_message_index(channel, id):
         if dic["id"] == id:
             return i
     return -1
+
+
+
 
 
 if __name__ == '__main__':
