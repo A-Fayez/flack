@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask,render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO, emit
 
 from uuid import uuid1
@@ -12,48 +12,27 @@ socketio = SocketIO(app)
 users = ["John Doe", "Jane Doe", "Meligy", "Fayez"]
 channels_list = ["general", "bots", "random"]
 
-# K: <string(chName)>, V: stack of messages (list) each element in list is dict with K:user V: msg
-messages_memory = {"general": [ { 
-                                  "user": "John Doe",
-                                  "timestamp": "11:10 AM",
-                                  "message": "Hi jane",
-                                  "id": "1"
-                                }, {
-                                    "user": "Jane Doe",
-                                    "timestamp": "11:11 AM",
-                                    "message": "Hi john",
-                                    "id": "2"
-                                }, {
-                                     "user": "Fayez",
-                                    "timestamp": "11:13 AM",
-                                    "message": "Hi all",
-                                    "id": "3"
-                                }
-                            ],
-                    "random": [ { 
-                                  "user": "John ",
-                                  "timestamp": "2:10 AM",
-                                  "message": "Hi jane",
-                                  "id": "4"
-                                }, {
-                                    "user": "Jane ",
-                                    "timestamp": "2:11 AM",
-                                    "message": "Hey",
-                                    "id": "5"
-                                }, {
-                                     "user": "Sabrina",
-                                    "timestamp": "2:13 AM",
-                                    "message": "sup",
-                                    "id": "6"
-                                }
-                            ],
-                        "bots": []
-                } 
+# K: <string(chName)>, V: stack of messages (list)
+# each element in list is dict with K:user V: msg
+messages_memory = {
+    "general": [
+        {"user": "John Doe", "timestamp": "11:10 AM", "message": "Hi jane", "id": "1"},
+        {"user": "Jane Doe", "timestamp": "11:11 AM", "message": "Hi john", "id": "2"},
+        {"user": "Fayez", "timestamp": "11:13 AM", "message": "Hi all", "id": "3"},
+    ],
+    "random": [
+        {"user": "John ", "timestamp": "2:10 AM", "message": "Hi jane", "id": "4"},
+        {"user": "Jane ", "timestamp": "2:11 AM", "message": "Hey", "id": "5"},
+        {"user": "Sabrina", "timestamp": "2:13 AM", "message": "sup", "id": "6"},
+    ],
+    "bots": [],
+}
 
 
 @app.route("/")
 def index():
     return render_template("index.html", try_to_remember="True")
+
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
@@ -65,29 +44,31 @@ def chat():
         if name is None:
             return render_template("index.html", try_to_remember="True")
 
-        if name.lower() not in list(map(lambda x:x.lower(), users)):
+        if name.lower() not in list(map(lambda x: x.lower(), users)):
             return render_template("index.html", try_to_remember="False")
 
         return render_template("chat.html", display_name=name)
 
     # authenticate
     # we want no display-name conflicts and at the same time we want to display
-    # them as typed, hence using the map function 
+    # them as typed, hence using the map function
     elif request.method == "POST":
         name = request.form.get("name")
-        if name.lower() in list(map(lambda x:x.lower(), users)): # display name conflicts
+
+        # display name conflicts
+        if name.lower() in list(map(lambda x: x.lower(), users)):
             return render_template("index.html", auth="False", try_to_remember="False")
         users.append(name)
         print(users)
         return render_template("chat.html", display_name=name)
-    
+
     return 405
 
 
 @app.route("/auth")
 def auth(display_name):
 
-    if name.lower() in list(map(lambda x:x.lower(), users)):
+    if display_name.lower() in list(map(lambda x: x.lower(), users)):
         return jsonify({"displayName": display_name, "exists": True})
 
     return jsonify({"displayName": display_name, "exists": False})
@@ -108,7 +89,7 @@ def channels():
         if len(request.json.keys()) != 1 or list(request.json.keys())[0] != "chName":
             print(list(request.json.keys())[0])
             return jsonify({"status": "400", "message": "Bad request"}), 400
-        
+
         channel_name = request.json.get("chName")
         if channel_name in channels_list:
             return jsonify({"valid": False}), 409
@@ -117,8 +98,9 @@ def channels():
         messages_memory[channel_name] = []
 
         return jsonify({"valid": True})
-    
+
     return 405
+
 
 @app.route("/messages", methods=["GET"])
 def messages():
@@ -132,26 +114,18 @@ def receive(bubble):
 
     message_id = str(uuid1())
 
-    messages_memory[bubble["channel"]].append({
-        "user": bubble["user"],
-        "timestamp": bubble["timestamp"],
-        "message": bubble["message"],
-        "id": message_id
-    })
-
+    messages_memory[bubble["channel"]].append(
+        {
+            "user": bubble["user"],
+            "timestamp": bubble["timestamp"],
+            "message": bubble["message"],
+            "id": message_id,
+        }
+    )
     bubble["id"] = message_id
 
-    print(type(bubble))
-    
-    print(bubble)
-
-    # only store up to 100 messages
     if len(messages_memory[bubble["channel"]]) > 100:
         del messages_memory[bubble["channel"]][0]
-
-    # import pprint
-    # pprint.pprint(messages_memory)
-    # pprint.pprint(bubble)
 
     emit("receive message", bubble, broadcast=True)
 
@@ -162,7 +136,7 @@ def channel(channel):
 
     if channel["name"] in channels_list:
         emit("channel validation", {"valid": False})
-    
+
     channels_list.append(channel["name"])
     messages_memory[channel["name"]] = []
 
@@ -178,9 +152,7 @@ def delete(bubble):
     message_index = find_message_index(channel, bubble["id"])
     del messages_memory.get(channel)[message_index]
 
-
     emit("confirm delete", bubble, broadcast=True)
-    
 
 
 def find_message_index(channel, id):
@@ -190,8 +162,5 @@ def find_message_index(channel, id):
     return -1
 
 
-
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     socketio.run(app)

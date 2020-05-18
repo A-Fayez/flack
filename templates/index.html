@@ -1,27 +1,20 @@
 {% extends "layout.html" %}
-{% block title %}
-    Flack
-{% endblock %}
-
-{% block body %}
-
+{% block title %} Flack {% endblock %}
+{% block body%}
 {% if try_to_remember == "True" %}
-    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endif %}
 
 <h1>Welcome to Flack</h1>
-<div class="display"> 
-    <form action="{{ url_for('chat') }}" method="POST">
-        <p>Chat with online people right now</p>
-        <input type="text" placeholder="display name ..." name="name" required/>
-        {% if auth == "False" %}
-            <label
-             id="duplicate"
-             style="position: relative; margin: 0 auto; color: red; top:1100%;">
-            This name already exists</label>
-        {% endif %}
-        <button>Join</button>
-     </form>
+<div class="display">
+  <form action="{{ url_for('chat') }}" method="POST">
+    <p>Chat with online people right now</p>
+    <input type="text" placeholder="display name ..." name="name" required />
+    {% if auth == "False" %}
+    <label id="duplicate" style="position: relative; margin: 0 auto; color: red; top: 1100%;">
+      This name already exists</label>
+    {% endif %}
+    <button>Join</button>
+  </form>
 </div>
 {% endblock %}
-

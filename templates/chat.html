@@ -1,69 +1,66 @@
 {% extends "layout.html" %}
-{% block title %}
-    Flack
-{% endblock %}
-{% block body %}
-
+% block title %}Flack {% endblock %}
+{% block body%}
 {% raw -%}
-<script id="messages-box" type="text/x-handlebars-template">  
-    <!-- Message bubble template-->    
-    <div class="msg-bubble {{ source }}" id = "{{ id }}">
-        <span class="sender">{{ sender }}</span>
-        <span class="timestamp">{{ timestamp }}</span>
-        <br>
-        {{message}}
-        <a class="delete">x</a>
-    </div> 
+<script id="messages-box" type="text/x-handlebars-template">
+  <!-- Message bubble template-->
+<div class="msg-bubble {{source}}" id="{{id}}">
+  <span class="sender">
+    {{sender}}
+  </span>
+  <span class="timestamp">
+    {{timestamp}}
+  </span>
+  <br />
+  {{message}}
+  <a class="delete">
+    x
+  </a>
+</div>
 </script>
 {%- endraw %}
 
 <div class="side-bar">
+  <div class="header-info">
+    <span id="online"></span>
+    <span id="name">{{ display_name }}</span>
+  </div>
 
-    <div class="header-info">
-        <span id="online"></span>
-        <span id="name">{{ display_name }}</span>
-    </div>
+  <div class="channels-section">
+    <span id="channels-label"><b>Channels</b></span>
+    <button id="new-channel-btn">+</button>
 
-    <div class="channels-section">
-
-        <span id="channels-label"><b>Channels</b></span>
-        <button id="new-channel-btn">+</button>
-
-        <ul class="channels">
-        </ul>
-
-    </div> 
+    <ul class="channels"></ul>
+  </div>
 </div>
 
 <!-- dynamically generate placeholder corrsepond to channel-->
 <div class="input-message-area">
-    <div class="new-msg-wrapper">
-        <textarea id="new-message-box" required></textarea>
-        <button class="send">Send</button>
-    </div>
+  <div class="new-msg-wrapper">
+    <textarea id="new-message-box" required></textarea>
+    <button class="send">Send</button>
+  </div>
 </div>
 
-
 {% raw -%}
-    <div class="messages">
-        <div id="chat-box">
-            <div class="bubble-wrapper">
-                <div class="inline-container">
-                    <!--  message template here     -->
-                </div>
-            </div>
-        </div>
+<div class="messages">
+  <div id="chat-box">
+    <div class="bubble-wrapper">
+      <div class="inline-container">
+        <!--  message template here     -->
+      </div>
     </div>
+  </div>
+</div>
 {%- endraw %}
 
-
 <div class="popup">
-    <div class="popup-content">
-        <label for="new-channel-name">Create New Chat Channel</label>
-        <input type="text" id="new-channel-name" placeholder="   Channel Name" required />
-        <button id="create">Create Channel</button>
-        <button id="cancel">Cancel</button>     
-    </div>
+  <div class="popup-content">
+    <label for="new-channel-name">Create New Chat Channel</label>
+    <input type="text" id="new-channel-name" placeholder="   Channel Name" required />
+    <button id="create">Create Channel</button>
+    <button id="cancel">Cancel</button>
+  </div>
 </div>
 
 <script src="{{ url_for('static', filename='js/helpers.js') }}"></script>

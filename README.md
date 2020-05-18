@@ -1,11 +1,9 @@
 ![](static/demo.gif)
 
-
-
 # Flack
 
 Flack is a real-time messaging service using Flask and Socket.IO, similar in spirit to Slack.
-This project is a submission in CS50 web development course. 
+This project is a submission in CS50 web development course.
 
 # Description
 
@@ -13,18 +11,18 @@ Users are able to sign in flack with a display name, create channels (i.e. chatr
 
 # Project Structure
 
-* [application.py](application.py) : Contains The Flask server.
+- [application.py](application.py) : Contains The Flask server.
 
-* [layout.html](templates/layout.html) : Containts the web pages layount markup.
-* [index.html](templates/chat.html) : The first page a user sees to enable them to sign in with a display name.
-* [chat.html](templates/chat.html) : chatrooms and messages markup.
+- [layout.html](templates/layout.html) : Containts the web pages layount markup.
+- [index.html](templates/chat.html) : The first page a user sees to enable them to sign in with a display name.
+- [chat.html](templates/chat.html) : chatrooms and messages markup.
 
-* [index.js](js/index.js) : Responsible for remembering the users when they get back.
-* [chat.js](js/chat.js) : Contains most of the chat UI and functional logic.
-* [helpers.js](js/helpers.js) : Some helper functions that helped me.
-
+- [index.js](js/index.js) : Responsible for remembering the users when they get back.
+- [chat.js](js/chat.js) : Contains most of the chat UI and functional logic.
+- [helpers.js](js/helpers.js) : Some helper functions that helped me.
 
 # Personal Touch
+
 Users are able to delete their own messages in real-time.
 
 # Installation
@@ -39,7 +37,7 @@ python3 application.py
 
 Now the server is run locally, navigate to [http://localhost:5000](http://localhost:5000).
 
-
 # Further Improvements
-* using `webpack` or any bundler instead of using a CDN.
-* private chat rooms between users
+
+- using `webpack` or any bundler instead of using a CDN.
+- private chat rooms between users
