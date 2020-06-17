@@ -27,7 +27,7 @@ Users are able to delete their own messages in real-time.
 
 # Installation
 
-Requires `Python>3.6`
+Requires `Python>=3.6`
 
 ```bash
 git clone https://github.com/A-Fayez/flack.git && cd flack

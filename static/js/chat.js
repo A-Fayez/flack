@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((channelsJSON) => {
             channelsJSON["channels"].forEach((channel_name) => {
                 channels.push(channel_name);
+                console.log(channel_name);
                 createNewChannelElement(channel_name);
             });
         });

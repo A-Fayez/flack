@@ -29,7 +29,9 @@ function createNewChannelElement(channelName, just_created = false) {
   link.href = "";
   link.className = "ch-link";
   link.id = channelName;
+
   link.onclick = function () {
+
     current_channel = channelName;
     localStorage.setItem("last_channel", current_channel);
 
@@ -69,6 +71,7 @@ function createNewChannelElement(channelName, just_created = false) {
       // configure delete button
       document.querySelectorAll(".msg-bubble.own .delete").forEach((link) => {
         link.href = "";
+
         link.onclick = function () {
           if (confirm("Are you sure you want to delete your message?")) {
             bubble["channel"] = channelName;
@@ -77,6 +80,7 @@ function createNewChannelElement(channelName, just_created = false) {
           }
           return false;
         };
+        
       });
     });
 
@@ -87,6 +91,7 @@ function createNewChannelElement(channelName, just_created = false) {
     updateScroll();
     return false;
   };
+
   channel.appendChild(link);
   document.querySelector(".channels").appendChild(channel);
 }

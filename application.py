@@ -80,6 +80,7 @@ def channels():
     in case of a GET request. And create a new channel in case of a
     POST request.
     """
+
     if request.method == "GET":
         return jsonify({"channels": channels_list})
 
