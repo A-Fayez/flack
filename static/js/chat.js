@@ -78,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             socket.emit("channel created", { name: channel_name });
+            return
         };
     });
 
@@ -154,6 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (e.keyCode === 13) {
                 e.preventDefault();
                 document.querySelector("#create").click();
+                return;
             }
         });
     };
